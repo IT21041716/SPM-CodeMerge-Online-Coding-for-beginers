@@ -1,0 +1,9 @@
+.cardLanguage {
+    cursor: pointer;
+}
+
+.cardLanguage:hover {
+    background-color: #e0e0e0;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+}
