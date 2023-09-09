@@ -18,12 +18,14 @@ import com.example.CodeFest.model.Languages;
 import com.example.CodeFest.services.LanguageService;
 import com.example.CodeFest.util.PdfContentUtil;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @RequestMapping("/api/languages")
 @RestController
+@CrossOrigin
 public class languageController {
 
     @Autowired

@@ -18,6 +18,7 @@ public class PdfContent {
     private int number;
     private String language;
     private String title;
-    private String url;
+    private String pdfUrl;
+    private String vedioUrl;
 
 }

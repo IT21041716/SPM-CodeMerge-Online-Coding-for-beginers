@@ -1,4 +1,6 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux';
+import { toast } from 'react-hot-toast'
 import {
     MDBContainer,
     MDBRow,
@@ -11,61 +13,58 @@ import {
     MDBBtn
 } from 'mdb-react-ui-kit';
 import './common.css'
+import { getAll } from '../actions/languageActions';
+import { Link } from 'react-router-dom';
 
 const userMain = () => {
+
+    const dispatch = useDispatch();
+    const loading = useSelector(state => state.language.loading)
+    const languages = useSelector(state => state.language.allLanguages)
+    console.log(languages)
+
+    useEffect(() => {
+        if (loading === true) {
+            toast.loading('Loading...', {
+                id: 'loading'
+            })
+        }
+        else if (loading === false) {
+            toast.dismiss('loading')
+        }
+
+    }, [loading]);
+
+
+    useEffect(() => {
+        dispatch(getAll())
+    }, [])
+
+
     return (
         <>
-        <h1><center>Languages</center></h1>
-        <br/><br/><br/>
-            <MDBRow className='row-cols-1 row-cols-md-3 g-4'>
-                <MDBCol>
-                    <MDBCard className='cardLanguage'>
-                        <MDBCardImage src='https://th.bing.com/th/id/OIP.wmVr1W0nuF_M_OswcpjyjgHaEc?w=299&h=180&c=7&r=0&o=5&dpr=1.4&pid=1.7' position='top' alt='...' />
-                        <MDBCardBody>
-                            <MDBCardTitle>Card title</MDBCardTitle>
-                            <MDBCardText>
-                                Some quick example text to build on the card title and make up the bulk of the card's content.
-                            </MDBCardText>
-                            <MDBBtn href='#'>Button</MDBBtn>
-                        </MDBCardBody>
-                    </MDBCard>
-                </MDBCol>
-                <MDBCol>
-                    <MDBCard>
-                        <MDBCardImage src='https://mdbootstrap.com/img/new/standard/nature/184.webp' position='top' alt='...' />
-                        <MDBCardBody>
-                            <MDBCardTitle>Card title</MDBCardTitle>
-                            <MDBCardText>
-                                Some quick example text to build on the card title and make up the bulk of the card's content.
-                            </MDBCardText>
-                            <MDBBtn href='#'>Button</MDBBtn>
-                        </MDBCardBody>
-                    </MDBCard>
-                </MDBCol>
-                <MDBCol>
-                    <MDBCard>
-                        <MDBCardImage src='https://mdbootstrap.com/img/new/standard/nature/184.webp' position='top' alt='...' />
-                        <MDBCardBody>
-                            <MDBCardTitle>Card title</MDBCardTitle>
-                            <MDBCardText>
-                                Some quick example text to build on the card title and make up the bulk of the card's content.
-                            </MDBCardText>
-                            <MDBBtn href='#'>Button</MDBBtn>
-                        </MDBCardBody>
-                    </MDBCard>
-                </MDBCol>
-                <MDBCol>
-                    <MDBCard>
-                        <MDBCardImage src='https://mdbootstrap.com/img/new/standard/nature/184.webp' position='top' alt='...' />
-                        <MDBCardBody>
-                            <MDBCardTitle>Card title</MDBCardTitle>
-                            <MDBCardText>
-                                Some quick example text to build on the card title and make up the bulk of the card's content.
-                            </MDBCardText>
-                            <MDBBtn href='#'>Button</MDBBtn>
-                        </MDBCardBody>
-                    </MDBCard>
-                </MDBCol>
+            <br /><br /><br />
+            <h1><center><b>Languages</b></center></h1>
+            <br /><br /><br />
+            <MDBRow className='row-cols-1 row-cols-md-3 g-4' style={{ paddingLeft: '7rem', paddingRight: '7rem' }}>
+                {
+                    languages.map((data, index) => (
+                        <MDBCol key={index} >
+                            <MDBCard>
+                                <MDBCardImage src={`../../../public/uploads/LanguageImages/${data.imageUrl}`} position='top' alt='...' style={{ objectFit: 'cover' }} />
+                                <MDBCardBody style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+                                    <MDBCardTitle style={{ fontSize: '32px', fontWeight: 'bold' }}>{data.name}</MDBCardTitle>
+                                    <MDBCardText style={{ fontSize: '14px', textAlign:'justify' }}>
+                                        {data.description}
+                                    </MDBCardText>
+                                    <Link to={`/${data.name}`}>
+                                        <MDBBtn color='info' >Info</MDBBtn>
+                                    </Link>
+                                </MDBCardBody>
+                            </MDBCard>
+                        </MDBCol>
+                    ))
+                }
             </MDBRow>
 
 

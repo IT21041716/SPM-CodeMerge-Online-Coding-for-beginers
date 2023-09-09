@@ -8,6 +8,7 @@ import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +25,7 @@ import com.example.CodeFest.util.PdfContentUtil;
 
 @RequestMapping("/api/pdf/")
 @RestController
+@CrossOrigin
 public class PdfContentController {
 
     @Autowired
@@ -32,11 +34,12 @@ public class PdfContentController {
     @PostMapping("/insert")
     public ResponseEntity<String> insertPdfContent(@RequestParam("number") int number,
             @RequestParam("language") String language, @RequestParam("title") String title,
-            @RequestParam("files") MultipartFile[] files) {
+            @RequestParam("pdf") MultipartFile[] pdfFiles, @RequestParam("vedio") MultipartFile[] vedioFiles) {
         List<String> errorMessages = new ArrayList<>();
         PdfContent pdf = new PdfContent();
+        // pdf upload part
         String uploadDir = "pdf";
-        Arrays.asList(files).forEach(file -> {
+        Arrays.asList(pdfFiles).forEach(file -> {
             long timestamp = System.currentTimeMillis();
             String fileName = timestamp + "_"
                     + StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
@@ -44,7 +47,7 @@ public class PdfContentController {
             if (isValidFileType(file)) {
                 try {
                     PdfContentUtil.saveFile(uploadDir, fileName, file);
-                    pdf.setUrl(fileName);
+                    pdf.setPdfUrl(fileName);
                 } catch (Exception e) {
                     e.printStackTrace();
                     errorMessages.add("Error saving file: " + fileName);
@@ -62,6 +65,30 @@ public class PdfContentController {
         pdf.setLanguage(language);
         pdf.setTitle(title);
 
+        // vedio upload part
+        String uploadDirV = "vedios";
+        Arrays.asList(vedioFiles).forEach(file -> {
+            long timestamp = System.currentTimeMillis();
+            String fileName = timestamp + "_"
+                    + StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
+
+            if (isValidFileTypeVedio(file)) {
+                try {
+                    PdfContentUtil.saveFile(uploadDirV, fileName, file);
+                    pdf.setVedioUrl(fileName);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    errorMessages.add("Error saving vedio: " + fileName);
+                }
+            } else {
+                errorMessages.add("Invalid file type: " + fileName + " ------ vedios only..!------");
+            }
+        });
+
+        if (!errorMessages.isEmpty()) {
+            return ResponseEntity.badRequest().body(String.join("\n", errorMessages));
+        }
+
         pdfContentService.save(pdf);
         return ResponseEntity.ok("Files uploaded successfully.");
     }
@@ -69,6 +96,11 @@ public class PdfContentController {
     private boolean isValidFileType(MultipartFile file) {
         String contentType = file.getContentType();
         return contentType != null && (contentType.equals("application/pdf"));
+    }
+
+    private boolean isValidFileTypeVedio(MultipartFile file) {
+        String contentType = file.getContentType();
+        return contentType != null && (contentType.startsWith("video"));
     }
 
     @GetMapping("/getById/{id}")
@@ -84,11 +116,12 @@ public class PdfContentController {
     @PutMapping("/update")
     public ResponseEntity<String> updatePdfContent(@RequestParam("id") String id, @RequestParam("number") int number,
             @RequestParam("language") String language, @RequestParam("title") String title,
-            @RequestParam("files") MultipartFile[] files) {
+            @RequestParam("pdf") MultipartFile[] pdfFiles, @RequestParam("vedio") MultipartFile[] vedioFiles) {
         List<String> errorMessages = new ArrayList<>();
         PdfContent pdf = new PdfContent();
+        // pdf upload part
         String uploadDir = "pdf";
-        Arrays.asList(files).forEach(file -> {
+        Arrays.asList(pdfFiles).forEach(file -> {
             long timestamp = System.currentTimeMillis();
             String fileName = timestamp + "_"
                     + StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
@@ -96,7 +129,7 @@ public class PdfContentController {
             if (isValidFileType(file)) {
                 try {
                     PdfContentUtil.saveFile(uploadDir, fileName, file);
-                    pdf.setUrl(fileName);
+                    pdf.setPdfUrl(fileName);
                 } catch (Exception e) {
                     e.printStackTrace();
                     errorMessages.add("Error saving file: " + fileName);
@@ -114,8 +147,32 @@ public class PdfContentController {
         pdf.setLanguage(language);
         pdf.setTitle(title);
 
+        // vedio upload part
+        String uploadDirV = "vedios";
+        Arrays.asList(vedioFiles).forEach(file -> {
+            long timestamp = System.currentTimeMillis();
+            String fileName = timestamp + "_"
+                    + StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
+
+            if (isValidFileTypeVedio(file)) {
+                try {
+                    PdfContentUtil.saveFile(uploadDirV, fileName, file);
+                    pdf.setVedioUrl(fileName);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    errorMessages.add("Error saving vedio: " + fileName);
+                }
+            } else {
+                errorMessages.add("Invalid file type: " + fileName + " ------ vedios only..!------");
+            }
+        });
+
+        if (!errorMessages.isEmpty()) {
+            return ResponseEntity.badRequest().body(String.join("\n", errorMessages));
+        }
+
         pdfContentService.updatePdf(pdf);
-        return ResponseEntity.ok("pdf updated successfully.");
+        return ResponseEntity.ok("files updated successfully.");
     }
 
     @DeleteMapping("/delete/{id}")
