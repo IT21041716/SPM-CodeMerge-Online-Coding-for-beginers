@@ -64,3 +64,35 @@ export const AddNew = (data) => {
         }
     }
 }
+
+export const getByID = (id) => {
+    console.log(id)
+    return async (dispatch) => {
+        try {
+            dispatch({ type: materialConstants.GETALL_MATERIAL_REQUEST })
+            const res = await axios.get(`http://localhost:8080/api/pdf/getById/${id}`)
+            // console.log(res.data)
+            if (res.status === 200) {
+                dispatch({
+                    type: materialConstants.GET_BY_ID_SUCCESS,
+                    payload: res.data
+                })
+            } else if (res.status === 400) {
+                toast.error('Retriving Failed..!', {
+                    id: 'failed'
+                })
+                dispatch({ type: materialConstants.GET_BY_ID_ERROR })
+            }
+
+        } catch (error) {
+            if (res.status === 500) {
+                toast.error("Server Error..!", {
+                    id: "serverErr"
+                })
+                dispatch({
+                    type: materialConstants.GET_BY_ID_ERROR
+                })
+            }
+        }
+    }
+}

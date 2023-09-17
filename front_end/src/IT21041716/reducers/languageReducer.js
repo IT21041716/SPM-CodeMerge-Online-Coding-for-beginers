@@ -2,7 +2,8 @@ import { languageConstants } from "../actions/constant";
 
 const initState = {
     loading: false,
-    allLanguages: []
+    allLanguages: [],
+    oneData : {}
 }
 
 export default (state = initState, action) => {
@@ -58,6 +59,25 @@ export default (state = initState, action) => {
             }
         break;
         case languageConstants.DELETE_LANGUAGE_ERROR:
+            state = {
+                ...state,
+                loading: false
+            }
+        break;
+        case languageConstants.GET_BY_ID_LANGUAGE_REQUEST:
+            state = {
+                ...state,
+                loading: true
+            }
+        break;
+        case languageConstants.GET_BY_ID_LANGUAGE_SUCCESS:
+            state = {
+                ...state,
+                loading: false,
+                oneData:action.payload
+            }
+        break;
+        case languageConstants.GET_BY_ID_LANGUAGE_ERROR:
             state = {
                 ...state,
                 loading: false

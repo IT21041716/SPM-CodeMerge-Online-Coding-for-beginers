@@ -17,5 +17,8 @@ public class Languages {
     private String name;
     private String description;
     private String imageUrl;
+    private String pageTitle;
+    private String pageSubTitle;
+    private String coverImageUrl;
 
 }

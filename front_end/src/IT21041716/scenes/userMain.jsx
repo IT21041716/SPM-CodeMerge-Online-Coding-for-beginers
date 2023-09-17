@@ -21,7 +21,6 @@ const userMain = () => {
     const dispatch = useDispatch();
     const loading = useSelector(state => state.language.loading)
     const languages = useSelector(state => state.language.allLanguages)
-    console.log(languages)
 
     useEffect(() => {
         if (loading === true) {
@@ -50,14 +49,14 @@ const userMain = () => {
                 {
                     languages.map((data, index) => (
                         <MDBCol key={index} >
-                            <MDBCard>
+                            <MDBCard style={{maxHeight: '650px'}}>
                                 <MDBCardImage src={`../../../public/uploads/LanguageImages/${data.imageUrl}`} position='top' alt='...' style={{ objectFit: 'cover' }} />
-                                <MDBCardBody style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+                                <MDBCardBody style={{ display: 'flex', flexDirection: 'column', height: '500px', maxHeight: '500px' }}>
                                     <MDBCardTitle style={{ fontSize: '32px', fontWeight: 'bold' }}>{data.name}</MDBCardTitle>
-                                    <MDBCardText style={{ fontSize: '14px', textAlign:'justify' }}>
+                                    <MDBCardText className ='cardText-size'>
                                         {data.description}
                                     </MDBCardText>
-                                    <Link to={`/${data.name}`}>
+                                    <Link to= {`/language/${data.id}`}>
                                         <MDBBtn color='info' >Info</MDBBtn>
                                     </Link>
                                 </MDBCardBody>
