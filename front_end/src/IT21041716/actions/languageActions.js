@@ -8,27 +8,24 @@ export const AddLanguage = (data) => {
         try {
             dispatch({ type: languageConstants.ADDNEW_LANGUAGE_REQUEST })
             const res = await axios.post('http://localhost:8080/api/languages/insert', data)
-            console.log(res.status)
             if (res.status === 200) {
                 toast.success("New Language Added..!", {
                     id: 'added'
                 })
                 dispatch({ type: languageConstants.ADDNEW_LANGUAGE_SUCCESS })
-            } else if (res.status === 400) {
+            } else {
                 toast.error('Adding Failed..!', {
                     id: 'failed'
                 })
                 dispatch({ type: languageConstants.ADDNEW_LANGUAGE_ERROR })
             }
         } catch (error) {
-            if (res.status === 500) {
                 toast.error("Server Error..!", {
                     id: "serverErr"
                 })
                 dispatch({
                     type: languageConstants.ADDNEW_LANGUAGE_ERROR
                 })
-            }
         }
     }
 }
@@ -43,21 +40,45 @@ export const getAll = () => {
                     type: languageConstants.GETALL_LANGUAGE_SUCCESS,
                     payload:res.data 
                 })
-            } else if (res.status === 400) {
+            } else {
                 toast.error('Retriving Failed..!', {
                     id: 'failed'
                 })
                 dispatch({ type: languageConstants.GETALL_LANGUAGE_ERROR })
             }
         } catch (error) {
-            if (res.status === 500) {
                 toast.error("Server Error..!", {
                     id: "serverErr"
                 })
                 dispatch({
                     type: languageConstants.ADDNEW_LANGUAGE_ERROR
                 })
+        }
+    }
+}
+export const getById = (id) => {
+    return async (dispatch) => {
+        try {
+            dispatch({ type: languageConstants.GET_BY_ID_LANGUAGE_REQUEST })
+            const res = await axios.get(`http://localhost:8080/api/languages/getById/${id}`)
+            if (res.status === 200) {
+                dispatch({ 
+                    type: languageConstants.GET_BY_ID_LANGUAGE_SUCCESS,
+                    payload:res.data 
+                })
+            } else {
+                toast.error('Somthing went wrong..!', {
+                    id: 'failed'
+                })
+                dispatch({ type: languageConstants.GET_BY_ID_LANGUAGE_ERROR })
             }
+        } catch (error) {
+                toast.error("Somthing went wrong..!", {
+                    id: "serverErr"
+                })
+                dispatch({
+                    type: languageConstants.GET_BY_ID_LANGUAGE_ERROR
+                })
         }
     }
 }

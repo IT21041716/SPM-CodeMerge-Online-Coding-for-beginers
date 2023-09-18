@@ -45,8 +45,54 @@
 
 }
 
-.coloum-para a{
+.video-title{
     text-decoration: none;
     color: black;
     font-size: 14px;
+}
+.pdf-title{
+    text-decoration: none;
+    color: black;
+    font-size: 14px;
+}
+
+.pdf-title:hover{
+    color:black;
+    text-decoration: none;
+}
+
+.video-title:hover{
+    color:black;
+}
+
+.vedio-player-main-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+
+}
+
+.inner-container {
+    width: 80%;
+    height: 90%;
+    position: relative;
+}
+.vedio-title{
+    margin-top: 2.5rem;
+    margin-left: 8rem;
+}
+.vedio-title p{
+    color: #000000;
+    font-size: 36px;
+    font-weight: 600;
+    text-transform:uppercase;
+}
+
+.cardText-size{
+    font-size: 14;
+    text-align: justify;
+    min-height: 120px;
+    max-height: 120px;
+    height: 120px;
 }

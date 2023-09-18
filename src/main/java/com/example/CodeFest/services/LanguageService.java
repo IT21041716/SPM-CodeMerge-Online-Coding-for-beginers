@@ -32,4 +32,9 @@ public class LanguageService {
         } else
             return false;
     }
+
+    public Languages getOne(String id) {
+        Languages languageObj = languageRepo.findById(id).get();
+        return languageObj;
+    }
 }

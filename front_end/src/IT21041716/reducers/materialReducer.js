@@ -2,7 +2,8 @@ import { materialConstants } from "../actions/constant";
 
 const initState = {
     loading: false,
-    allMaterial: []
+    allMaterial: [],
+    oneData: {}
 }
 
 export default (state = initState, action) => {
@@ -39,6 +40,26 @@ export default (state = initState, action) => {
             }
         break;
         case materialConstants.ADDNEW_MATERIAL_ERROR:
+            state = {
+                ...state,
+                loading: false
+            }
+        break;
+        case materialConstants.GET_BY_ID_REQUEST:
+            state = {
+                ...state,
+                loading: true
+            }
+        break;
+        case materialConstants.GET_BY_ID_SUCCESS:
+            state = {
+                ...state,
+                loading: false,
+                oneData: action.payload
+
+            }
+        break;
+        case materialConstants.GET_BY_ID_ERROR:
             state = {
                 ...state,
                 loading: false
