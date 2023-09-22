@@ -46,5 +46,8 @@ public class QuestionService {
     public void deleteQuestion(String questionId) {
         questionRepository.deleteById(questionId);
     }
-    // Add more methods for retrieving, updating, and deleting questions
+    public List<Question> getQuestionsByUserId(String userId) {
+        return questionRepository.findByUser_Id(userId);
+    }
+    
 }

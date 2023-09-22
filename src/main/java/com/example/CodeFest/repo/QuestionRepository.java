@@ -12,4 +12,5 @@ import com.example.CodeFest.model.Question;
 @Repository
 public interface QuestionRepository extends MongoRepository<Question, String>{
     List<Question> findByUserId(String userId);
+    List<Question> findByUser_Id(String userId);
 }
