@@ -9,5 +9,6 @@ import com.example.CodeFest.model.PdfContent;
 
 @Repository
 public interface PdfContentRepo extends MongoRepository<PdfContent, String> {
-    List<PdfContent> findByLanguageIn(List<String> languages);
+    List<PdfContent> findByLanguageIn(List<String> language);
+    void deleteAllByLanguage(String language);
 }

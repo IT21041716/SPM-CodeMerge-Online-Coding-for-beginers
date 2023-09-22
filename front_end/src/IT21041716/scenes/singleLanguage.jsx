@@ -20,11 +20,16 @@ const singleLanguage = () => {
     const oneData = useSelector((state) => state.language.oneData)
     const id = useparams.id;
     const language = oneData.name;
-    
+
     useEffect(() => {
         dispatch(getById(id));
+    }, [dispatch, id]);
+
+
+    useEffect(() => {
         dispatch(getAllMaterial(language));
-    }, [dispatch, id, language]);
+    }, [dispatch, language]);
+
 
     useEffect(() => {
         if (loading === true) {
@@ -43,8 +48,8 @@ const singleLanguage = () => {
             <div
                 style={{
                     backgroundImage: oneData.coverImageUrl
-                    ? `url(../../../public/uploads/LanguageImages/${oneData.coverImageUrl})`
-                    : `url(${bg})`,
+                        ? `url(../../../public/uploads/LanguageImages/${oneData.coverImageUrl})`
+                        : `url(${bg})`,
                     backgroundRepeat: 'no-repeat',
                     backgroundSize: 'cover',
                     height: '400px',
