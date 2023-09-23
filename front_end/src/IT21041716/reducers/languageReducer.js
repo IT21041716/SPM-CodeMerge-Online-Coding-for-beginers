@@ -83,6 +83,25 @@ export default (state = initState, action) => {
                 loading: false
             }
         break;
+        case languageConstants.UPDATE_LANGUAGE_REQUEST:
+            state = {
+                ...state,
+                loading: true
+            }
+        break;
+        case languageConstants.UPDATE_LANGUAGE_SUCCESS:
+            state = {
+                ...state,
+                loading: false,
+                oneData:action.payload
+            }
+        break;
+        case languageConstants.UPDATE_LANGUAGE_ERROR:
+            state = {
+                ...state,
+                loading: false
+            }
+        break;
     }
     return state
 }

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,15 +33,23 @@ public class languageController {
     private LanguageService languageService;
 
     @PostMapping("/insert")
-    public ResponseEntity<String> insertLanguage(@RequestParam("name") String name, @RequestParam("description") String description,
-            @RequestParam("files") MultipartFile[] files , @RequestParam("pageTitle") String pageTitle, @RequestParam("pageSubTitle") String pageSubTitle, @RequestParam("coverImage") MultipartFile[]  coverImage) {
+    public ResponseEntity<String> insertLanguage(@RequestParam("name") String name,
+            @RequestParam("description") String description,
+            @RequestParam("files") MultipartFile[] files, @RequestParam("pageTitle") String pageTitle,
+            @RequestParam("pageSubTitle") String pageSubTitle, @RequestParam("coverImage") MultipartFile[] coverImage) {
+            
+            System.out.println(files);
+            System.out.println(coverImage);
+
+        if (coverImage == null) {
+            System.out.println("helloooo" + coverImage);
+        }
         List<String> errorMessages = new ArrayList<>();
         Languages languageObj = new Languages();
         String uploadDir = "LanguageImages";
 
-        System.out.println("\n\n\n\n\n\n\n"+coverImage+ "\n\n\n\n\n\n\n\n" );
+        // language image upload
 
-        //language image upload
         Arrays.asList(files).forEach(file -> {
             long timestamp = System.currentTimeMillis();
             String fileName = timestamp + "_"
@@ -55,31 +64,34 @@ public class languageController {
                     errorMessages.add("Error saving Image: " + fileName);
                 }
             } else {
-                errorMessages.add("Invalid file type: " + fileName + " ------ Images only..!------");
+                errorMessages.add("Invalid file type in thumbnail: " + fileName + " ------ Images only..!------");
             }
         });
 
-        //cover image upload
+        // cover image upload
+
+        if (coverImage == null) {
+            languageObj.setCoverImageUrl("");
+        } else {
             Arrays.asList(coverImage).forEach(file -> {
-            long timestamp = System.currentTimeMillis();
-            String fileName = timestamp + "_"
-                    + StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
+                long timestamp = System.currentTimeMillis();
+                String fileName = timestamp + "_"
+                        + StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
 
-            if (isValidFileType(file)) {
-                try {
-                    PdfContentUtil.saveFile(uploadDir, fileName, file);
-                    languageObj.setCoverImageUrl(fileName);;
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    errorMessages.add("Error saving Cover Image: " + fileName);
+                if (isValidFileType(file)) {
+                    try {
+                        PdfContentUtil.saveFile(uploadDir, fileName, file);
+                        languageObj.setCoverImageUrl(fileName);
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        errorMessages.add("Error saving Cover Image: " + fileName);
+                    }
+                } else {
+                    errorMessages.add("Invalid file type in coverImage: " + fileName + " ------ Images only..!------");
                 }
-            } else {
-                errorMessages.add("Invalid file type: " + fileName + " ------ Images only..!------");
-            }
-        });
-
-
-
+            });
+        }
         if (!errorMessages.isEmpty()) {
             return ResponseEntity.badRequest().body(String.join("\n", errorMessages));
         }
@@ -108,11 +120,76 @@ public class languageController {
         return languageService.getOne(id);
     }
 
-    @DeleteMapping("/delete/{id}")
-    public boolean languageDelete(@PathVariable("id") String id) {
-       
-        return languageService.deleteLanguages(id);
+    @DeleteMapping("/delete/{id}/{language}")
+    public List<Languages> languageDelete(@PathVariable("id") String id, @PathVariable("language") String language) {
+        return languageService.deleteLanguages(id, language);
+    }
+
+    @PutMapping("/updateLanguage")
+    public Languages updateLanguage(@RequestParam("id") String id, @RequestParam("name") String name,
+            @RequestParam("description") String description,
+            @RequestParam("files") MultipartFile[] files, @RequestParam("pageTitle") String pageTitle,
+            @RequestParam("pageSubTitle") String pageSubTitle, @RequestParam("coverImage") MultipartFile[] coverImage) {
+
+        Languages languageObj = new Languages();
+        String uploadDir = "LanguageImages";
+
+        // language image upload
+
+        if (files != null) {
+            Languages data = languageService.getOne(id);
+            languageObj.setImageUrl(data.getImageUrl());
+        } else {
+            Arrays.asList(files).forEach(file -> {
+                long timestamp = System.currentTimeMillis();
+                String fileName = timestamp + "_"
+                        + StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
+
+                if (isValidFileType(file)) {
+                    try {
+                        PdfContentUtil.saveFile(uploadDir, fileName, file);
+                        languageObj.setImageUrl(fileName);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    System.out.println("invalid file type");
+                }
+            });
+        }
+
+        // cover image upload
+
+        if (coverImage != null) {
+            Languages data = languageService.getOne(id);
+            languageObj.setCoverImageUrl(data.getCoverImageUrl());
+        } else if (coverImage == null) {
+            Arrays.asList(coverImage).forEach(file -> {
+                long timestamp = System.currentTimeMillis();
+                String fileName = timestamp + "_"
+                        + StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
+
+                if (isValidFileType(file)) {
+                    try {
+                        PdfContentUtil.saveFile(uploadDir, fileName, file);
+                        languageObj.setCoverImageUrl(fileName);
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    System.out.println("invalid file type");
+                }
+            });
+        }
+
+        languageObj.setId(id);
+        languageObj.setName(name);
+        languageObj.setDescription(description);
+        languageObj.setPageTitle(pageTitle);
+        languageObj.setPageSubTitle(pageSubTitle);
+
+        return languageService.save(languageObj);
     }
 
 }
-

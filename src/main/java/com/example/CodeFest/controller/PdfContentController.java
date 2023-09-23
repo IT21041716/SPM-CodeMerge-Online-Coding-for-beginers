@@ -179,4 +179,10 @@ public class PdfContentController {
     public boolean pdfDelete(@PathVariable("id") String id) {
         return pdfContentService.deletePdfContent(id);
     }
+
+
+    @DeleteMapping("/deleteAll/{language}")
+    public void deleteAll(@PathVariable("language") String language){
+        pdfContentService.deleteAllByLanguage(language);
+    }
 }

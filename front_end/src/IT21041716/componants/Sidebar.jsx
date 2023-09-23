@@ -50,6 +50,10 @@ const navItems = [
         icon: <Groups2Outlined />,
     },
     {
+        text: "Languages",
+        icon: <SwapHorizOutlinedIcon />,
+    },
+    {
         text: "Management",
         icon: null,
     },
@@ -72,7 +76,7 @@ const Sidebar = (props) => {
     // }
 
     useEffect(() => {
-        setActive(pathname.substring(1))
+        setActive(pathname.substring(1));
     }, [pathname]);
 
 
@@ -92,9 +96,9 @@ const Sidebar = (props) => {
                         width: props.drawerWidth,
                         "& .MuiDrawer-paper": {
                             color: 'white',
-                            fontFamily: 'Roboto Slab', // Change the font family here
+                            fontFamily: "'Roboto Slab', sans-serif",
                             backgroundColor: '#131b25',
-                            boxSizing: "border-box", // Fix typo in boxSizing
+                            boxSizing: "border-box",
                             borderWidth: props.isNonMobile ? 0 : "2px",
                             width: props.drawerWidth,
                             boxShadow: '20px 50px -50px rgba(0, 0, 0, 0.6)',
@@ -110,7 +114,7 @@ const Sidebar = (props) => {
                         <Box m="1.5rem 2rem 2rem 3rem">
                             <FlexBetween color="white" sx={{ justifyContent: 'center' }} >
                                 <Box display="flex" alignItems="center" gap="0.5rem" >
-                                    <Typography variant="h4" fontWeight='600' fontSize="25px" sx={{ textAlign: 'center' }} >
+                                    <Typography variant="h4" fontFamily= 'Roboto Slab' fontWeight='600' fontSize="25px" sx={{ textAlign: 'center' }} >
                                         Admin Dashboard
                                     </Typography>
                                 </Box>
@@ -138,6 +142,7 @@ const Sidebar = (props) => {
                                 <Typography
                                     fontSize="18"
                                     fontWeight="500"
+                                    fontFamily= 'Roboto Slab'
                                     sx={{ m: "10px 0 0 0" }}
                                 >
                                     Sithanga Rashmika
@@ -149,55 +154,54 @@ const Sidebar = (props) => {
 
 
                         <List>
-                            {navItems.map(({ text, icon }) => {
-                                if (!icon) {
-                                    return (
-                                        <Typography key={text} sx={{ m: "2.25rem 0 1rem 3rem" }}>
-                                            {text}
-                                        </Typography>
-                                    );
-                                }
-                                const lcText = text.toLowerCase();
+    {navItems.map(({ text, icon }) => {
+        const lcText = text.toLowerCase();
 
-                                return (
-                                    <ListItem key={text} disablePadding>
-                                        <ListItemButton
-                                            onClick={() => {
-                                                navigate(`/${lcText}`);
-                                                setActive(lcText);
-                                                props.setIsSidebarOpen(false)
-                                            }}
-                                            sx={{
-                                                backgroundColor:
-                                                    active === lcText
-                                                        ? "#b8b8b86c"
-                                                        : "transparent",
-                                                color:
-                                                    active === lcText
-                                                        ? "#3da58a"
-                                                        : "white",
-                                            }}
-                                        >
-                                            <ListItemIcon
-                                                sx={{
-                                                    ml: "2rem",
-                                                    color:
-                                                        active === lcText
-                                                            ? "#3da58a"
-                                                            : "white",
-                                                }}
-                                            >
-                                                {icon}
-                                            </ListItemIcon>
-                                            <ListItemText primary={text} />
-                                            {active === lcText && (
-                                                <ChevronRightOutlined sx={{ ml: "auto" }} />
-                                            )}
-                                        </ListItemButton>
-                                    </ListItem>
-                                );
-                            })}
-                        </List>
+        if (!icon) {
+            return (
+                <Typography key={text} sx={{ m: "2.25rem 0 1rem 3rem", fontFamily: 'Roboto Slab' }}>
+                    {text}
+                </Typography>
+            );
+        }
+
+        return (
+            <ListItem key={text} disablePadding>
+                <ListItemButton
+                    onClick={() => {
+                        navigate(`/${lcText}`);
+                        setActive(lcText);
+                        props.setIsSidebarOpen(false);
+                    }}
+                    sx={{
+                        backgroundColor:
+                            active === lcText ? "#b8b8b86c" : "transparent",
+                        color: active === lcText ? "#3da58a" : "white",
+                        fontFamily: 'Roboto Slab'
+                    }}
+                >
+                    <ListItemIcon
+                        sx={{
+                            ml: "2rem",
+                            color: active === lcText ? "#3da58a" : "white",
+                            fontFamily: 'Roboto Slab'
+                        }}
+                    >
+                        {icon}
+                    </ListItemIcon>
+                    <ListItemText
+                        primary={text}
+                        sx={{ fontFamily: 'Roboto Slab' }}
+                    />
+                    {active === lcText && (
+                        <ChevronRightOutlined sx={{ ml: "auto" }} />
+                    )}
+                </ListItemButton>
+            </ListItem>
+        );
+    })}
+</List>
+
                     </motion.Box>
                     <motion.Box
                         position="absolute"

@@ -47,4 +47,10 @@ public class PdfContentService {
             return false;
     }
 
+    //delete all pdf content
+    public void deleteAllByLanguage (String language){
+        pdfContentRepo.deleteAllByLanguage(language);
+    }
+
+
 }
