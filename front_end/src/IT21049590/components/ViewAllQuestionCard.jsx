@@ -12,14 +12,13 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import Grid from "@mui/material/Grid";
-const QuestionCard = ({ question }) => {
+const ViewAllQuestionCard = ({ question, userId }) => {
   const [open, setOpen] = useState(false);
   const [anser, setAnser] = useState([]);
 
   const handleClickOpen = (id) => {
     const apiUrl = `http://localhost:8080/answers/question/${id}`;
 
-    // Make an HTTP GET request to the API
     axios
       .get(apiUrl)
       .then((response) => {
@@ -44,6 +43,9 @@ const QuestionCard = ({ question }) => {
     <>
       <Card>
         <CardContent>
+          <Typography variant="h5" component="div">
+            <p>User : {question.user.firstName}</p>
+          </Typography>
           <Typography variant="h5" component="div">
             {question.title}
           </Typography>
@@ -83,4 +85,4 @@ const QuestionCard = ({ question }) => {
   );
 };
 
-export default QuestionCard;
+export default ViewAllQuestionCard;
