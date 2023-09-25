@@ -1,11 +1,12 @@
 // UserProfile.js
 import axios from "axios";
-import { useNavigate, useParams,Link } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 
 const UserProfile = ({}) => {
   const { userId } = useParams();
   const [user, setUser] = useState([]);
+  const [isAddQuestionDialogOpen, setIsAddQuestionDialogOpen] = useState(false); // Manage dialog state
 
   const navigate = useNavigate();
 
@@ -40,6 +41,14 @@ const UserProfile = ({}) => {
         // Handle error or display a message to the user
       });
   };
+  const openAddQuestionDialog = () => {
+    setIsAddQuestionDialogOpen(true);
+  };
+
+  // Function to close the Add Question dialog
+  const closeAddQuestionDialog = () => {
+    setIsAddQuestionDialogOpen(false);
+  };
 
   return (
     <div>
@@ -54,6 +63,13 @@ const UserProfile = ({}) => {
       <button onClick={handleDelete}>Delete</button>
       <Link to={`/question/${userId}`}>
         <button>View Questions</button>
+      </Link>
+      <Link to={`/addQuestion/${userId}`}>
+        <button>Add Questions</button>
+      </Link>
+      
+      <Link to={`/viewAllQuestions/${userId}`}>
+        <button>View All Questions</button>
       </Link>
     </div>
   );

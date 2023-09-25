@@ -1,16 +1,20 @@
-// Question.js
+// UserProfile.js
 import axios from "axios";
-import { useParams, Link } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import Grid from "@mui/material/Grid";
 import QuestionCard from "./QuestionCard";
+import ViewAllQuestionCard from "./ViewAllQuestionCard";
 
-const Question = ({}) => {
-  const [questions, setQuestions] = useState([]);
+const ViewAllQuestions = ({}) => {
   const { userId } = useParams();
+  const [questions, setQuestions] = useState([]);
+
+  const navigate = useNavigate();
+
   useEffect(() => {
     axios
-      .get(`http://localhost:8080/questions/user/${userId}`)
+      .get(`http://localhost:8080/questions/all`)
       .then((response) => {
         setQuestions(response.data);
 
@@ -20,7 +24,6 @@ const Question = ({}) => {
         console.log(error);
       });
   }, []);
-  console.log(questions[0]);
 
   return (
     <div
@@ -37,7 +40,7 @@ const Question = ({}) => {
       <Grid container spacing={2}>
         {questions.map((question, index) => (
           <Grid item xs={12} key={index}>
-            <QuestionCard question={question} />
+            <ViewAllQuestionCard question={question} userId={userId} />
           </Grid>
         ))}
       </Grid>
@@ -45,4 +48,4 @@ const Question = ({}) => {
   );
 };
 
-export default Question;
+export default ViewAllQuestions;
