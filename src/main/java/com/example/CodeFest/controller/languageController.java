@@ -36,7 +36,7 @@ public class languageController {
     public ResponseEntity<String> insertLanguage(@RequestParam("name") String name,
             @RequestParam("description") String description,
             @RequestParam("files") MultipartFile[] files, @RequestParam("pageTitle") String pageTitle,
-            @RequestParam("pageSubTitle") String pageSubTitle, @RequestParam("coverImage") MultipartFile[] coverImage) {
+            @RequestParam("pageSubTitle") String pageSubTitle, @RequestParam(value = "coverImage", required = false) MultipartFile[] coverImage) {
             
             System.out.println(name);
             System.out.println(description);
