@@ -118,7 +118,7 @@ export const UpdateLanguage = (form) => {
         try {
             dispatch({ type: languageConstants.DELETE_LANGUAGE_REQUEST })
             const res = await axios.put(`http://localhost:8080/api/languages/updateLanguage`, form)
-            console.log(res)
+            console.log("data",res)
             if (res.status === 200) {
                 dispatch({ 
                     type: languageConstants.DELETE_LANGUAGE_SUCCESS,

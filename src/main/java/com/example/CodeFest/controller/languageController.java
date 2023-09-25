@@ -38,10 +38,14 @@ public class languageController {
             @RequestParam("files") MultipartFile[] files, @RequestParam("pageTitle") String pageTitle,
             @RequestParam("pageSubTitle") String pageSubTitle, @RequestParam("coverImage") MultipartFile[] coverImage) {
             
+            System.out.println(name);
+            System.out.println(description);
+            System.out.println(pageTitle);
+            System.out.println(pageSubTitle);
             System.out.println(files);
-            System.out.println(coverImage);
+            System.out.println("hello"+ coverImage);
 
-        if (coverImage == null) {
+        if (coverImage != null) {
             System.out.println("helloooo" + coverImage);
         }
         List<String> errorMessages = new ArrayList<>();
@@ -70,7 +74,7 @@ public class languageController {
 
         // cover image upload
 
-        if (coverImage == null) {
+        if (coverImage != null) {
             languageObj.setCoverImageUrl("");
         } else {
             Arrays.asList(coverImage).forEach(file -> {

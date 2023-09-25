@@ -73,11 +73,18 @@ const newLanguage = () => {
             form.append("files", files);
             form.append("pageTitle", pageTitle)
             form.append("pageSubTitle", pageSubTitle);
-            form.append("coverImage", coverImage);
-            
+
+            if (!coverImage) {
+                form.append("coverImage", document.queryselector("#fileinput").files[0]);
+        
+            } else{
+                form.append("coverImage", coverImage);
+            }
+
             form.forEach((value, key) => {
                 console.log(key, value);
-              });
+            });
+
             dispatch(AddLanguage(form))
             setName('')
             setDescription('')
