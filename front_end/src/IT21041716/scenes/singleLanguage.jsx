@@ -70,7 +70,7 @@ const singleLanguage = () => {
                     allMaterial.map((data, index) => (
                         <div className='main-container' key={index}>
                             <div className='container-heading'>
-                                <h2>{data.number}. {data.title}</h2>
+                                <h2>{index + 1}.{data.title}</h2>
                             </div>
                             <div>
                                 <div className='one-line'>

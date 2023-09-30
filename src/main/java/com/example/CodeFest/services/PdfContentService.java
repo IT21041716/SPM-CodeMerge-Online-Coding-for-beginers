@@ -27,6 +27,12 @@ public class PdfContentService {
         return pdfObj;
     }
 
+    // get video by id
+    public PdfContent getOneVideo(String id) {
+        PdfContent pdfObj = pdfContentRepo.findById(id).get();
+        return pdfObj;
+    }
+
     // get all by languages
     public List<PdfContent> getByLanguage(List<String> language) {
         List<PdfContent> pdfList = pdfContentRepo.findByLanguageIn(language);
@@ -39,12 +45,15 @@ public class PdfContentService {
     }
 
     // delete pdf content
-    public boolean deletePdfContent(String id) {
+    public List<PdfContent> deletePdfContent(String id, String language) {
         if (pdfContentRepo.existsById(id)) {
             pdfContentRepo.deleteById(id);
-            return true;
-        } else
-            return false;
+            List<PdfContent> pdfList = pdfContentRepo.findByLanguageIn(language);
+            return pdfList;
+        } else{
+            List<PdfContent> pdfList = pdfContentRepo.findByLanguageIn(language);
+            return pdfList; 
+        }
     }
 
     //delete all pdf content

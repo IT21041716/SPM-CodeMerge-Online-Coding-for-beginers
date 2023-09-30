@@ -32,9 +32,11 @@ public class PdfContentController {
     private PdfContentService pdfContentService;
 
     @PostMapping("/insert")
-    public ResponseEntity<String> insertPdfContent(@RequestParam("number") int number,
-            @RequestParam("language") String language, @RequestParam("title") String title,
-            @RequestParam("pdf") MultipartFile[] pdfFiles, @RequestParam("vedio") MultipartFile[] vedioFiles) {
+    public ResponseEntity<String> insertPdfContent(
+            @RequestParam("language") String language,
+            @RequestParam("title") String title,
+            @RequestParam("pdf") MultipartFile[] pdfFiles,
+            @RequestParam("vedio") MultipartFile[] vedioFiles) {
         List<String> errorMessages = new ArrayList<>();
         PdfContent pdf = new PdfContent();
         // pdf upload part
@@ -61,9 +63,8 @@ public class PdfContentController {
             return ResponseEntity.badRequest().body(String.join("\n", errorMessages));
         }
 
-        pdf.setNumber(number);
-        pdf.setLanguage(language);
         pdf.setTitle(title);
+        pdf.setLanguage(language);
 
         // vedio upload part
         String uploadDirV = "vedios";
@@ -114,75 +115,97 @@ public class PdfContentController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<String> updatePdfContent(@RequestParam("id") String id, @RequestParam("number") int number,
-            @RequestParam("language") String language, @RequestParam("title") String title,
-            @RequestParam("pdf") MultipartFile[] pdfFiles, @RequestParam("vedio") MultipartFile[] vedioFiles) {
+    public ResponseEntity<String> updatePdfContent(
+            @RequestParam("id") String id,
+            @RequestParam("language") String language,
+            @RequestParam("title") String title,
+            @RequestParam(value = "pdf", required = false) MultipartFile[] pdfFiles,
+            @RequestParam(value = "vedio", required = false) MultipartFile[] vedioFiles) {
         List<String> errorMessages = new ArrayList<>();
         PdfContent pdf = new PdfContent();
-        // pdf upload part
-        String uploadDir = "pdf";
-        Arrays.asList(pdfFiles).forEach(file -> {
-            long timestamp = System.currentTimeMillis();
-            String fileName = timestamp + "_"
-                    + StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
+        System.out.println(id);
+        System.out.println(language);
+        System.out.println(title);
+        System.out.println(pdfFiles);
+        System.out.println(vedioFiles);
 
-            if (isValidFileType(file)) {
-                try {
-                    PdfContentUtil.saveFile(uploadDir, fileName, file);
-                    pdf.setPdfUrl(fileName);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    errorMessages.add("Error saving file: " + fileName);
+        if (pdfFiles == null && vedioFiles == null) {
+            System.out.println("No files were uploaded");
+        }
+
+        // Check if PDF files were uploaded
+        if (pdfFiles != null && pdfFiles.length > 0) {
+            String uploadDir = "pdf";
+            Arrays.asList(pdfFiles).forEach(file -> {
+                long timestamp = System.currentTimeMillis();
+                String fileName = timestamp + "_"
+                        + StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
+
+                // Move file type validation check inside the block
+                if (isValidFileType(file)) {
+                    try {
+                        PdfContentUtil.saveFile(uploadDir, fileName, file);
+                        pdf.setPdfUrl(fileName);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        errorMessages.add("Error saving file: " + fileName);
+                    }
+                } else {
+                    errorMessages.add("Invalid file type: " + fileName + " ------ pdf only..!------");
                 }
-            } else {
-                errorMessages.add("Invalid file type: " + fileName + " ------ pdf only..!------");
-            }
-        });
+            });
+        } else {
+            PdfContent data = pdfContentService.getOne(id);
+            pdf.setPdfUrl(data.getPdfUrl());
+            System.out.println("No PDF files were uploaded");
+        }
+
+        // Check if video files were uploaded
+        if (vedioFiles != null && vedioFiles.length > 0) {
+            String uploadDirV = "videos";
+            Arrays.asList(vedioFiles).forEach(file -> {
+                long timestamp = System.currentTimeMillis();
+                String fileName = timestamp + "_"
+                        + StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
+
+                // Move file type validation check inside the block
+                if (isValidFileTypeVedio(file)) {
+                    try {
+                        PdfContentUtil.saveFile(uploadDirV, fileName, file);
+                        pdf.setVedioUrl(fileName);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        errorMessages.add("Error saving video: " + fileName);
+                    }
+                } else {
+                    errorMessages.add("Invalid file type: " + fileName + " ------ videos only..!------");
+                }
+            });
+        } else {
+            PdfContent data = pdfContentService.getOneVideo(id);
+            pdf.setVedioUrl(data.getVedioUrl());
+            System.out.println("No video files were uploaded");
+        }
 
         if (!errorMessages.isEmpty()) {
             return ResponseEntity.badRequest().body(String.join("\n", errorMessages));
         }
+
         pdf.setId(id);
-        pdf.setNumber(number);
-        pdf.setLanguage(language);
         pdf.setTitle(title);
-
-        // vedio upload part
-        String uploadDirV = "vedios";
-        Arrays.asList(vedioFiles).forEach(file -> {
-            long timestamp = System.currentTimeMillis();
-            String fileName = timestamp + "_"
-                    + StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
-
-            if (isValidFileTypeVedio(file)) {
-                try {
-                    PdfContentUtil.saveFile(uploadDirV, fileName, file);
-                    pdf.setVedioUrl(fileName);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    errorMessages.add("Error saving vedio: " + fileName);
-                }
-            } else {
-                errorMessages.add("Invalid file type: " + fileName + " ------ vedios only..!------");
-            }
-        });
-
-        if (!errorMessages.isEmpty()) {
-            return ResponseEntity.badRequest().body(String.join("\n", errorMessages));
-        }
+        pdf.setLanguage(language);
 
         pdfContentService.updatePdf(pdf);
-        return ResponseEntity.ok("files updated successfully.");
+        return ResponseEntity.ok("Files updated successfully.");
     }
 
     @DeleteMapping("/delete/{id}")
-    public boolean pdfDelete(@PathVariable("id") String id) {
-        return pdfContentService.deletePdfContent(id);
+    public List<PdfContent> pdfDelete(@PathVariable("id") String id, @PathVariable("language") String language)) {
+        return pdfContentService.deletePdfContent(id,language);  
     }
 
-
     @DeleteMapping("/deleteAll/{language}")
-    public void deleteAll(@PathVariable("language") String language){
+    public void deleteAll(@PathVariable("language") String language) {
         pdfContentService.deleteAllByLanguage(language);
     }
 }

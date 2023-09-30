@@ -8,9 +8,10 @@ import { toast } from 'react-hot-toast'
 const NewLanguage = () => {
 
     const dispatch = useDispatch();
-    const loading = useSelector(state => state.language.loading)
+    const loading = useSelector(state => state.language.loading);
     const coverImageInputRef = useRef(null);
-    const imageInputRef = useRef(null);
+    const filesInputRef = useRef(null);
+
 
     useEffect(() => {
         if (loading === true) {
@@ -72,11 +73,12 @@ const NewLanguage = () => {
             form.append("files", files);
             form.append("pageTitle", pageTitle)
             form.append("pageSubTitle", pageSubTitle);
-            form.append("coverImage", coverImage || new File([], 'empty'));
 
-            form.forEach((value, key) => {
-                console.log(key, value);
-            });
+            if (coverImage) {
+                form.append("coverImage", coverImage);
+            } else if (coverImage) {
+                form.append("coverImage", new File([], 'empty'));
+            }
 
             dispatch(AddLanguage(form))
             setName('')
@@ -84,7 +86,7 @@ const NewLanguage = () => {
             setPageTitle('')
             setPageSubTitle('')
             coverImageInputRef.current.value = "";
-            imageInputRef.current.value="";
+            filesInputRef.current.value = "";
 
         }
 
@@ -122,7 +124,7 @@ const NewLanguage = () => {
                                     <Form.Control
                                         type='file'
                                         onChange={(e) => { handleCatImg(e) }}
-                                        ref={imageInputRef}
+                                        ref={filesInputRef}
                                     />
                                 </div>
                             </div>

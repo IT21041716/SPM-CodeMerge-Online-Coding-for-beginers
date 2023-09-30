@@ -46,10 +46,6 @@ const navItems = [
         icon: <InventoryOutlinedIcon />,
     },
     {
-        text: "Add New Material",
-        icon: <Groups2Outlined />,
-    },
-    {
         text: "Languages",
         icon: <SwapHorizOutlinedIcon />,
     },

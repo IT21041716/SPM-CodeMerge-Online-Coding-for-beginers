@@ -1,15 +1,21 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
 import { IconButton } from "@mui/material";
 import { useDispatch, useSelector } from 'react-redux';
 import { DeletLanguage, getAll, UpdateLanguage } from '../../actions/languageActions';
+import { AddNew } from '../../actions/materialAction'
 import DeleteIcon from '@mui/icons-material/Delete';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
+import SettingsIcon from '@mui/icons-material/Settings';
 import CheckIcon from '@mui/icons-material/Check';
 import { MDBBtn, MDBModal, MDBModalDialog, MDBModalContent, MDBModalHeader, MDBModalTitle, MDBModalBody } from 'mdb-react-ui-kit';
 import { Col, Form } from 'react-bootstrap'
 import Swal from 'sweetalert2';
+import bg from '../../../assets/IT21041716/bg.jpg'
+import { toast } from 'react-hot-toast'
+import Tooltip from '@mui/material/Tooltip';
+import { Link } from 'react-router-dom';
 
 
 const languages = () => {
@@ -17,8 +23,32 @@ const languages = () => {
     // main table 
     const dispatch = useDispatch();
     const allLanguages = useSelector(state => state.language.allLanguages);
-    console.log(allLanguages)
+    const loading = useSelector(state => state.language.loading)
+    const loading2 = useSelector((state) => state.material.loading)
+    
+    useEffect(() => {
+        if (loading === true) {
+            toast.loading('Loading...', {
+                id: 'loading'
+            })
+        }
+        else if (loading === false) {
+            toast.dismiss('loading')
+        }
 
+    }, [loading]);
+
+    useEffect(() => {
+        if (loading2 === true) {
+            toast.loading('Loading...', {
+                id: 'loading'
+            })
+        }
+        else if (loading2 === false) {
+            toast.dismiss('loading')
+        }
+
+    }, [loading2]);
 
     useEffect(() => {
         dispatch(getAll())
@@ -90,7 +120,7 @@ const languages = () => {
                                 </Col>
                                 <Col md={6}>
                                     <label style={{ fontSize: "15px", fontWeight: "600" }}>Language Wallpaper</label><br />
-                                    <img src={`../../../public/uploads/LanguageImages/${datas.coverImageUrl}`} style={{ width: '300px', height: '200px', marginTop: '1rem' }} />
+                                    <img src={datas.coverImageUrl ? `../../../public/uploads/LanguageImages/${datas.coverImageUrl}` : bg} style={{ width: '300px', height: '200px', marginTop: '1rem' }} />
                                 </Col>
                             </div>
 
@@ -109,31 +139,25 @@ const languages = () => {
 
     // update modal 
     const [shUpdateModel, setShUpdateModel] = useState(false);
-    const [data, setData] = useState('')
-    const [no, setNo] = useState('')
-
+    const coverImageInputRef = useRef(null);
+    const filesInputRef = useRef(null);
     const [id, setId] = useState('');
     const [name, setName] = useState('');
     const [pageTitle, setPageTitle] = useState('');
     const [pageSubTitle, setPageSubTitle] = useState('');
     const [description, setDescription] = useState('');
-    const [coverImage, setCoverImage] = useState('')
-    const [files, setFiles] = useState('')
-
+    const [coverImage, setCoverImage] = useState(null)
+    const [files, setFiles] = useState(null)
 
     const UpdateModelShow = (data, index) => {
         setShUpdateModel(true);
-        setData(data)
-        setNo(index)
+        setName(data.name)
         setId(data.id)
-        setName(data.name);
         setPageTitle(data.pageTitle)
         setPageSubTitle(data.pageSubTitle)
         setDescription(data.description)
         setFiles(data.imageUrl)
         setCoverImage(data.coverImageUrl)
-
-
     }
 
     const UpdateModelClose = (e) => {
@@ -142,22 +166,14 @@ const languages = () => {
     }
 
     const languageImageFun = (e) => {
-        const file = e.target.file[0];
-        if(file != null){
-            setFiles(file)
-        }else{
-            setFiles(null)
-        }
+        const file = e.target.files[0];
+        setFiles(file)
+
     }
 
     const coverImageFun = (e) => {
-        const file = e.target.file[0];
-        if(file != null){
-            setCoverImage(file)
-        }else{
-            setFiles(null)
-        }
-
+        const file = e.target.files[0];
+        setCoverImage(file)
     }
 
     const sendData = (e) => {
@@ -169,10 +185,20 @@ const languages = () => {
         form.append("description", description);
         form.append("pageTitle", pageTitle)
         form.append("pageSubTitle", pageSubTitle);
-        form.append("coverImage", coverImage);
-        form.append("files", files)
+        if (files) {
+            form.append("files", files)
+        } else {
+            form.append("files", new File([], 'empty'));
+        }
+        if (coverImage) {
+            form.append("coverImage", coverImage);
+        } else {
+            form.append("coverImage", new File([], 'empty'));
+        }
 
         dispatch(UpdateLanguage(form));
+        coverImageInputRef.current.value = "";
+        filesInputRef.current.value = "";
 
     }
 
@@ -182,7 +208,7 @@ const languages = () => {
                 <MDBModalDialog centered className="modal-dialog modal-dialog-scrollable" style={{ maxWidth: '800px' }}>
                     <MDBModalContent>
                         <MDBModalHeader>
-                            <MDBModalTitle style={{ fontWeight: '600' }}>LANGUAGE DETAILS</MDBModalTitle>
+                            <MDBModalTitle style={{ fontWeight: '600' }}>UPDATE LANGUAGE DETAILS</MDBModalTitle>
                             <MDBBtn className='btn-close' color='none' onClick={UpdateModelClose}></MDBBtn>
                         </MDBModalHeader>
                         <MDBModalBody>
@@ -192,7 +218,7 @@ const languages = () => {
 
                                     <div className="mb-3">
                                         <label className="small mb-1" for="inputUsername">Language Name</label>
-                                        <input className="form-control" id="inputUsername" type="text" value={data.name} disable />
+                                        <input className="form-control" id="inputUsername" type="text" value={name} onChange={(e) => setName(e.target.value)} />
                                     </div>
                                     <div className="mb-3">
                                         <label className="small mb-1" for="inputUsername">Page Title</label>
@@ -215,6 +241,7 @@ const languages = () => {
                                             <Form.Control
                                                 type='file'
                                                 onChange={(e) => languageImageFun(e)}
+                                                ref={filesInputRef}
                                             />
                                         </Col>
                                         <Col md={6}>
@@ -223,6 +250,7 @@ const languages = () => {
                                             <Form.Control
                                                 type='file'
                                                 onChange={(e) => coverImageFun(e)}
+                                                ref={coverImageInputRef}
                                             />
                                         </Col>
                                     </div>
@@ -241,6 +269,121 @@ const languages = () => {
             </MDBModal>
         )
     }
+
+
+    //add material modal
+    const [shModel, setShModel] = useState(false);
+    const [language, setLanguage] = useState("");
+    const [title, setTitle] = useState('');
+    const [pdf, setPdf] = useState(null);
+    const [video, setVideo] = useState(null);
+    const pdfInputRef = useRef(null);
+    const vedioInputRef = useRef(null);
+
+    const ModelShow = (data) => {
+        setShModel(true);
+        setLanguage(data)
+
+    }
+
+    const ModelClose = (e) => {
+        setShModel(false);
+
+    }
+
+    const handlePdf = (e) => {
+        const file = e.target.files[0];
+        setPdf(file);
+
+    }
+    const handleVideo = (e) => {
+        const file = e.target.files[0];
+        setVideo(file);
+
+    }
+
+    const sendData1 = (e) => {
+        e.preventDefault();
+
+        if (title === '') {
+            toast.error("title Required..!", {
+                id: 'title'
+            })
+        } else if (pdf === null) {
+            toast.error("pdf is Required..!")
+        } else if (video === null) {
+            toast.error("video is Required..!")
+        } else if (title != '' && pdf != null && video != null) {
+            const form = new FormData();
+            form.append("language", language);
+            form.append('title', title)
+            form.append('pdf', pdf)
+            form.append('vedio', video)
+
+            dispatch(AddNew(form))
+            setTitle('')
+            pdfInputRef.current.value = "";
+            vedioInputRef.current.value = "";
+        }
+    }
+
+    const DisplayModelMaterial = () => {
+        return (
+            <MDBModal show={shModel} setShow={setShModel} tabIndex='-1'>
+                <MDBModalDialog centered className="modal-dialog modal-dialog-scrollable" style={{ maxWidth: '800px' }}>
+                    <MDBModalContent>
+                        <MDBModalHeader>
+                            <MDBModalTitle style={{ fontWeight: '600' }}>ADD NEW MATERIAL</MDBModalTitle>
+                            <MDBBtn className='btn-close' color='none' onClick={ModelClose}></MDBBtn>
+                        </MDBModalHeader>
+                        <MDBModalBody>
+                            <form onSubmit={sendData1} encType="multipart/form-data" >
+
+                                <div className="mb-3">
+                                    <label className="small mb-1" for="inputLastName">Language</label>
+                                    <input className="form-control" id="inputLastName" type="text" value={language} disabled />
+                                </div>
+
+                                <div className="mb-3">
+                                    <label className="small mb-1" for="inputUsername">Title</label>
+                                    <input className="form-control" id="inputUsername" type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
+                                </div>
+
+                                <div className="row gx-3 mb-3">
+
+                                    <div className="col-md-6">
+                                        <label className="small mb-1" >PDF Content</label>
+                                        <Form.Control
+                                            type='file'
+                                            onChange={(e) => { handlePdf(e) }}
+                                            ref={pdfInputRef}
+                                        />
+                                    </div>
+                                    <div className="col-md-6">
+                                        <label className="small mb-1" >Lecture Video</label>
+                                        <Form.Control
+                                            type='file'
+                                            onChange={(e) => { handleVideo(e) }}
+                                            ref={vedioInputRef}
+                                        />
+                                    </div>
+                                </div>
+
+                                <button type="submit" className="btn btn-primary" style={{ backgroundColor: "#3da58a", borderStyle: "none" }}>Save Material</button>
+                            </form>
+                        </MDBModalBody>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal" onClick={DataModelClose}>Close</button>
+                        </div>
+
+                    </MDBModalContent>
+                </MDBModalDialog>
+            </MDBModal>
+        )
+    }
+
+
 
     const deleteLanguage = (data) => {
         const id = data.id;
@@ -284,23 +427,33 @@ const languages = () => {
                                     <td style={{ textAlign: 'center' }}>{data.name}</td>
                                     <td>
                                         <div style={{ display: "flex", flexDirection: "row", justifyContent: 'center' }}>
-
-                                            <IconButton onClick={(e) => { DataModelShow(data, index) }}>
-                                                <RemoveRedEyeIcon size={20} style={{ color: "#243556", height: "1.2rem" }} />
-                                            </IconButton>
-
-                                            <IconButton onClick={(e) => { UpdateModelShow(data) }} >
-                                                <CheckIcon size={20} style={{ color: "#243556", height: "1.2rem" }} />
-                                            </IconButton>
-
-                                            <IconButton onClick={(e) => { deleteLanguage(data) }}>
-                                                <DeleteIcon size={20} style={{ color: "#243556", height: "1.2rem" }} />
-                                            </IconButton>
-
-                                            <IconButton onClick={(e) => { }}>
-                                                <PlaylistAddIcon size={20} style={{ color: "#243556", height: "1.2rem" }} />
-                                            </IconButton>
-
+                                            <Tooltip title="View Details">
+                                                <IconButton onClick={(e) => { DataModelShow(data, index) }}>
+                                                    <RemoveRedEyeIcon size={20} style={{ color: "#243556", height: "1.2rem" }} />
+                                                </IconButton>
+                                            </Tooltip>
+                                            <Tooltip title="Update Language">
+                                                <IconButton onClick={(e) => { UpdateModelShow(data) }} >
+                                                    <CheckIcon size={20} style={{ color: "#243556", height: "1.2rem" }} />
+                                                </IconButton>
+                                            </Tooltip>
+                                            <Tooltip title="Delete Language">
+                                                <IconButton onClick={(e) => { deleteLanguage(data) }}>
+                                                    <DeleteIcon size={20} style={{ color: "#243556", height: "1.2rem" }} />
+                                                </IconButton>
+                                            </Tooltip>
+                                            <Tooltip title="Add New Material">
+                                                <IconButton onClick={(e) => { ModelShow(data.name) }}>
+                                                    <PlaylistAddIcon size={20} style={{ color: "#243556", height: "1.2rem" }} />
+                                                </IconButton>
+                                            </Tooltip>
+                                            <Tooltip title="Manage Materials">
+                                                <Link to = {`/Material/${data.name}`}>
+                                                    <IconButton>
+                                                        <SettingsIcon size={20} style={{ color: "#243556", height: "1.2rem" }} />
+                                                    </IconButton>
+                                                </Link>
+                                            </Tooltip>
                                         </div>
                                     </td>
                                 </tr>
@@ -311,6 +464,7 @@ const languages = () => {
             </div>
             {DisplayModel()}
             {DisplayUpdateModel()}
+            {DisplayModelMaterial()}
         </>
     )
 }

@@ -65,6 +65,42 @@ export default (state = initState, action) => {
                 loading: false
             }
         break;
+        case materialConstants.UPDATE_MATERIAL_REQUEST:
+            state = {
+                ...state,
+                loading: true
+            }
+        break;
+        case materialConstants.UPDATE_MATERIAL_SUCCESS:
+            state = {
+                ...state,
+                loading: false,
+            }
+        break;
+        case materialConstants.UPDATE_MATERIAL_ERROR:
+            state = {
+                ...state,
+                loading: false
+            }
+        break;
+        case materialConstants.DELETE_MATERIAL_REQUEST:
+            state = {
+                ...state,
+                loading: true
+            }
+        break;
+        case materialConstants.DELETE_MATERIAL_SUCCESS:
+            state = {
+                ...state,
+                loading: false,
+            }
+        break;
+        case materialConstants.DELETE_MATERIAL_ERROR:
+            state = {
+                ...state,
+                loading: false
+            }
+        break;
     }
     return state
 }

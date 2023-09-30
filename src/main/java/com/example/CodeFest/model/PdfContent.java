@@ -15,7 +15,6 @@ import lombok.NoArgsConstructor;
 public class PdfContent {
     @Id
     private String id;
-    private int number;
     private String language;
     private String title;
     private String pdfUrl;
