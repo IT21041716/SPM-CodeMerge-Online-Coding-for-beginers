@@ -34,6 +34,25 @@ const ViewAllQuestionCard = ({ question, userId }) => {
       });
     setOpen(true);
   };
+  const handleAddAnserClickOpen = (id,userId) => {
+    const apiUrl = `http://localhost:8080/answers/post`;
+
+    axios
+      .post(apiUrl)
+      .then((response) => {
+        // Handle the successful response here
+        setAnser(response.data);
+        console.log("Details:", anser);
+
+        // You can use 'details' to display or manipulate the data as needed
+      })
+      .catch((error) => {
+        // Handle any errors that occur during the request
+        console.error("Error fetching details:", error);
+      });
+      
+    setOpen(true);
+  };
 
   const handleClose = () => {
     setOpen(false);
@@ -55,6 +74,12 @@ const ViewAllQuestionCard = ({ question, userId }) => {
             variant="outlined"
           >
             View Answers
+          </Button>
+          <Button
+            onClick={() => handleAddAnserClickOpen(question.id,userId)}
+            variant="outlined"
+          >
+            Add Answer
           </Button>
         </CardContent>
       </Card>
