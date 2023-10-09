@@ -1,17 +1,17 @@
-import React from 'react'
 import { Form } from 'react-bootstrap'
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { AddLanguage } from '../../actions/languageActions';
 import { toast } from 'react-hot-toast'
 
 
-
-
-const newLanguage = () => {
+const NewLanguage = () => {
 
     const dispatch = useDispatch();
-    const loading = useSelector(state => state.language.loading)
+    const loading = useSelector(state => state.language.loading);
+    const coverImageInputRef = useRef(null);
+    const filesInputRef = useRef(null);
+
 
     useEffect(() => {
         if (loading === true) {
@@ -73,16 +73,20 @@ const newLanguage = () => {
             form.append("files", files);
             form.append("pageTitle", pageTitle)
             form.append("pageSubTitle", pageSubTitle);
-            form.append("coverImage", coverImage);
-            
-            form.forEach((value, key) => {
-                console.log(key, value);
-              });
+
+            if (coverImage) {
+                form.append("coverImage", coverImage);
+            } else if (coverImage) {
+                form.append("coverImage", new File([], 'empty'));
+            }
+
             dispatch(AddLanguage(form))
             setName('')
             setDescription('')
             setPageTitle('')
             setPageSubTitle('')
+            coverImageInputRef.current.value = "";
+            filesInputRef.current.value = "";
 
         }
 
@@ -120,6 +124,7 @@ const newLanguage = () => {
                                     <Form.Control
                                         type='file'
                                         onChange={(e) => { handleCatImg(e) }}
+                                        ref={filesInputRef}
                                     />
                                 </div>
                             </div>
@@ -130,6 +135,7 @@ const newLanguage = () => {
                                     <Form.Control
                                         type='file'
                                         onChange={(e) => { handleCatImg2(e) }}
+                                        ref={coverImageInputRef}
                                     />
                                 </div>
                             </div>
@@ -143,4 +149,4 @@ const newLanguage = () => {
     )
 }
 
-export default newLanguage
+export default NewLanguage

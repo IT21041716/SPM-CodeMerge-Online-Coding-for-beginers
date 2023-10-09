@@ -1,7 +1,9 @@
 package com.example.CodeFest.model;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -20,20 +22,21 @@ public class Game_Puzzle {
     private String gameId;
     private String gameModuleName;
     private String gameModuleTopic;
-    private HashMap<Integer,String> images = new HashMap<Integer,String>();
+    private String question;
+    private HashMap<Integer,String> texts = new HashMap<Integer,String>();
     private ArrayList<String> discussion = new ArrayList<>();
 
 
-    public void setImage(int no, String name){
-        images.put(no, name);
+    public void setTexts(int no, String name){
+        texts.put(no, name);
     }
 
-    public String getImageValue(int key){
-        return images.get(key);
+    public String getTextValue(int key){
+        return texts.get(key);
     } 
     
     public void setValueDiscussion(String msg){
         discussion.add(msg);
     }
-    
+
 }

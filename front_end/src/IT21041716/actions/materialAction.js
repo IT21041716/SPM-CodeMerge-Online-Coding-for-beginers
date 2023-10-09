@@ -1,6 +1,7 @@
 import { materialConstants } from "./constant";
 import { toast } from "react-hot-toast";
 import axios from "axios";
+import Swal from 'sweetalert2'
 
 export const getAllMaterial = (language) => {
     return async (dispatch) => {
@@ -45,7 +46,7 @@ export const AddNew = (data) => {
                 dispatch({
                     type: materialConstants.ADDNEW_MATERIAL_SUCCESS,
                 })
-            } else if (res.status === 400) {
+            } else {
                 toast.error('Adding Failed..!', {
                     id: 'failed'
                 })
@@ -53,31 +54,27 @@ export const AddNew = (data) => {
             }
 
         } catch (error) {
-            if (res.status === 500) {
-                toast.error("Server Error..!", {
-                    id: "serverErr"
-                })
-                dispatch({
-                    type: materialConstants.ADDNEW_MATERIAL_ERROR
-                })
-            }
+            toast.error("Server Error..!", {
+                id: "serverErr"
+            })
+            dispatch({
+                type: materialConstants.ADDNEW_MATERIAL_ERROR
+            })
         }
     }
 }
 
 export const getByID = (id) => {
-    console.log(id)
     return async (dispatch) => {
         try {
             dispatch({ type: materialConstants.GETALL_MATERIAL_REQUEST })
             const res = await axios.get(`http://localhost:8080/api/pdf/getById/${id}`)
-            // console.log(res.data)
             if (res.status === 200) {
                 dispatch({
                     type: materialConstants.GET_BY_ID_SUCCESS,
                     payload: res.data
                 })
-            } else if (res.status === 400) {
+            } else {
                 toast.error('Retriving Failed..!', {
                     id: 'failed'
                 })
@@ -85,14 +82,79 @@ export const getByID = (id) => {
             }
 
         } catch (error) {
-            if (res.status === 500) {
-                toast.error("Server Error..!", {
-                    id: "serverErr"
-                })
+            toast.error("Error..!", {
+                id: "serverErr"
+            })
+            dispatch({
+                type: materialConstants.GET_BY_ID_ERROR
+            })
+
+        }
+    }
+}
+
+
+export const updateMaterial = (data) => {
+    return async (dispatch) => {
+        try {
+            dispatch({ type: materialConstants.UPDATE_MATERIAL_REQUEST })
+            const res = await axios.put('http://localhost:8080/api/pdf/update', data)
+            if (res.status === 200) {
                 dispatch({
-                    type: materialConstants.GET_BY_ID_ERROR
+                    type: materialConstants.UPDATE_MATERIAL_SUCCESS,
+                    // payload: res.data
                 })
+                toast.success("Update Success..!", {
+                    id: 'updt'
+                })
+            } else {
+                toast.error('Update Failed..!', {
+                    id: 'failed'
+                })
+                dispatch({ type: materialConstants.UPDATE_MATERIAL_ERROR })
             }
+
+        } catch (error) {
+            toast.error("Somthing went wrong..!", {
+                id: "serverErr"
+            })
+            dispatch({
+                type: materialConstants.UPDATE_MATERIAL_ERROR
+            })
+        }
+    }
+}
+
+
+export const deleteMaterial = (id) => {
+    return async (dispatch) => {
+        try {
+            dispatch({ type: materialConstants.DELETE_MATERIAL_REQUEST })
+            const res = await axios.put(`http://localhost:8080/api/pdf/delete/${id}`)
+            if (res.status === 200) {
+                dispatch({
+                    type: materialConstants.DELETE_MATERIAL_SUCCESS,
+                    // payload: res.data
+                })
+                Swal.fire(
+                    'Deleted!',
+                    'Your entry has been deleted.',
+                    'success'
+                )
+            } else {
+                toast.error('Delete Failed..!', {
+                    id: 'failed'
+                })
+                dispatch({ type: materialConstants.DELETE_MATERIAL_ERROR })
+            }
+
+        } catch (error) {
+            toast.error("Somthing went wrong..!", {
+                id: "serverErr"
+            })
+            dispatch({
+                type: materialConstants.DELETE_MATERIAL_ERROR
+            })
         }
     }
 }

@@ -49,14 +49,16 @@ const userMain = () => {
                 {
                     languages.map((data, index) => (
                         <MDBCol key={index} >
-                            <MDBCard style={{maxHeight: '650px'}}>
-                                <MDBCardImage src={`../../../public/uploads/LanguageImages/${data.imageUrl}`} position='top' alt='...' style={{ objectFit: 'cover' }} />
+                            <MDBCard style={{ maxHeight: '670px'}}>
+                                <div style={{ maxHeight: '650px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                <MDBCardImage src={`../../../public/uploads/LanguageImages/${data.imageUrl}`} alt='Language Logo' position='top' className='centered-cover-image' />
+                                </div>
                                 <MDBCardBody style={{ display: 'flex', flexDirection: 'column', height: '500px', maxHeight: '500px' }}>
                                     <MDBCardTitle style={{ fontSize: '32px', fontWeight: 'bold' }}>{data.name}</MDBCardTitle>
-                                    <MDBCardText className ='cardText-size'>
+                                    <MDBCardText className='cardText-size'>
                                         {data.description}
                                     </MDBCardText>
-                                    <Link to= {`/language/${data.id}`}>
+                                    <Link to={`/language/${data.id}`}>
                                         <MDBBtn color='info' >Info</MDBBtn>
                                     </Link>
                                 </MDBCardBody>
