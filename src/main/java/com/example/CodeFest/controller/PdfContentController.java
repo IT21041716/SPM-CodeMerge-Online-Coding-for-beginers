@@ -200,7 +200,7 @@ public class PdfContentController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public List<PdfContent> pdfDelete(@PathVariable("id") String id, @PathVariable("language") String language)) {
+    public List<PdfContent> pdfDelete(@PathVariable("id") String id, @PathVariable("language") String language) {
         return pdfContentService.deletePdfContent(id,language);  
     }
 
