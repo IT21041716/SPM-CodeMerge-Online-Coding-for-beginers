@@ -1,8 +1,11 @@
 package com.example.CodeFest.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -32,91 +35,73 @@ public class Game_Puzzle_Controller {
     private Game_Puzzle_Repo gamePuzzleRepo;
 
     @PostMapping("/add")
-    public void addGamePuzzle(@RequestParam("files") MultipartFile[] files,@RequestParam("gameModule") String gameModule, @RequestParam("GMTopic") String GMTopic, @RequestParam("gameId") String gameId){
-        String uploadDir = "G";
+    public void addGame(@RequestParam("text") List<String> text, @RequestParam("gameModule") String gameModule,
+            @RequestParam("GMTopic") String GMTopic, @RequestParam("question") String question) {
         AtomicInteger count = new AtomicInteger(0);
-
         Game_Puzzle GP = new Game_Puzzle();
+        String gameID = UUID.randomUUID().toString();
 
-        Arrays.asList(files).stream().forEach(file->{
-             String fileName = (Objects.requireNonNull(file.getOriginalFilename()));
-             GP.setImage(count.incrementAndGet(), fileName);
-             System.out.println(fileName);   
-             try{
-                Game_Puzzle_Util.saveImage(uploadDir, fileName, file); 
-            }catch(IOException e){
-
+        for (String tx : text) {
+            if (tx != "") {
+                GP.setTexts(count.incrementAndGet(), tx);
             }
 
-        });
-
-        GP.setGameId(gameId);
+        }
+        GP.setGameId(gameID);
         GP.setGameModuleName(gameModule);
         GP.setGameModuleTopic(GMTopic);
-        GP.setDiscussion(null);;
+        GP.setDiscussion(null);
+        GP.setQuestion(question);
 
         gamePuzzleRepo.save(GP);
-
     }
 
-    @GetMapping("/result/{gameId}")
-    public boolean checkResult(@PathVariable("gameId") String gameId, @RequestParam("files") MultipartFile[] files){
-        
+    @PostMapping("/result/{gameId}")
+    public boolean checkResult(@PathVariable("gameId") String gameId, @RequestBody List<String> text) {
+        boolean result = true;
         Game_Puzzle GP = gamePuzzleRepo.findById(gameId).get();
-        AtomicInteger count = new AtomicInteger(0);
-        AtomicBoolean r = new AtomicBoolean(true);
-        
-        Arrays.asList(files).stream().forEach(file->{
-             String fileName = (Objects.requireNonNull(file.getOriginalFilename()));
-             
-            if(!fileName.equalsIgnoreCase(GP.getImageValue(count.incrementAndGet()))){
-                r.set(false);
+
+        System.out.println(text);
+
+        for (int i = 1; i < GP.getTexts().size(); i++) {
+            if (!GP.getTextValue(i).equalsIgnoreCase(text.get(i - 1))) {
+                result = false;
             }
 
-        });
+        }
 
-        boolean result = r.get();
         return result;
-
     }
 
     @PutMapping("/update/{gameId}")
-    public void updateGame(@PathVariable("gameId") String gameId,@RequestParam("files") MultipartFile[] files,@RequestParam("gameModule") String gameModule, @RequestParam("GMTopic") String GMTopic){
+    public void updateGame(@RequestParam("text") List<String> text, @RequestParam("gameModule") String gameModule,
+            @RequestParam("GMTopic") String GMTopic, @RequestParam("question") String question,
+            @PathVariable("gameId") String gameID) {
 
-        String uploadDir = "G";
-        AtomicInteger count = new AtomicInteger(0);
+        System.out.println("Awa");
 
-        Game_Puzzle GP = gamePuzzleRepo.findById(gameId).get();
+        Game_Puzzle GP = gamePuzzleRepo.findById(gameID).get();
 
-        Arrays.asList(files).stream().forEach(file->{
-             String fileName = (Objects.requireNonNull(file.getOriginalFilename()));
-             GP.setImage(count.incrementAndGet(), fileName);
-             System.out.println(fileName);   
-             try{
-                Game_Puzzle_Util.saveImage(uploadDir, fileName, file); 
-            }catch(IOException e){
-
-            }
-
-        });
+        System.out.println(GP);
 
         GP.setDiscussion(GP.getDiscussion());
-        GP.setGameId(gameId);
+        GP.setGameId(gameID);
         GP.setGameModuleName(gameModule);
         GP.setGameModuleTopic(GMTopic);
+        GP.setQuestion(question);
 
         gamePuzzleRepo.save(GP);
     }
 
     @DeleteMapping("/delete/{gameId}")
-    public void deleteGame(@PathVariable("gameId") String gameId){
+    public void deleteGame(@PathVariable("gameId") String gameId) {
 
         gamePuzzleRepo.deleteById(gameId);
 
     }
 
     @PutMapping("/discussion/{gameId}")
-    public void addDiscussion(@PathVariable("gameId") String gameId, @RequestBody String dis){
+    public void addDiscussion(@PathVariable("gameId") String gameId, @RequestBody String dis) {
 
         Game_Puzzle GP = gamePuzzleRepo.findById(gameId).get();
 
@@ -125,9 +110,25 @@ public class Game_Puzzle_Controller {
     }
 
     @GetMapping("/view/{gameId}")
-    public Game_Puzzle getOnGame_Puzzle(@PathVariable("gameId") String gameId){
+    public Game_Puzzle getOnGame_Puzzle(@PathVariable("gameId") String gameId) {
         Game_Puzzle GP = gamePuzzleRepo.findById(gameId).get();
         return GP;
     }
-    
+
+    @GetMapping("/all")
+    public List<Game_Puzzle> allGames() {
+        return gamePuzzleRepo.findAll();
+    }
+
+    @GetMapping("/one/{gameId}")
+    public ArrayList<String> getGameCodeList(@PathVariable("gameId") String gameId) {
+        Game_Puzzle GP = gamePuzzleRepo.findById(gameId).get();
+        ArrayList<String> t = new ArrayList<>();
+
+        for (int i = 1; i < GP.getTexts().size(); i++) {
+            t.add(GP.getTextValue(i));
+        }
+
+        return t;
+    }
 }
