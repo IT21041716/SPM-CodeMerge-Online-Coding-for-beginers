@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react'
 import { MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
 import { IconButton } from "@mui/material";
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllMaterial, updateMaterial } from '../../actions/materialAction'
+import { getAllMaterial, updateMaterial, DeleteMaterial } from '../../actions/materialAction'
 import DeleteIcon from '@mui/icons-material/Delete';
 import CheckIcon from '@mui/icons-material/Check';
 import { MDBBtn, MDBModal, MDBModalDialog, MDBModalContent, MDBModalHeader, MDBModalTitle, MDBModalBody } from 'mdb-react-ui-kit';
@@ -156,6 +156,29 @@ const material = () => {
         )
     }
 
+    // delete function
+
+    const deleteMaterial =(data) => {
+
+        const id = data.id;
+        const language = data.language;
+        console.log(language)
+
+        Swal.fire({
+            title: 'Are you sure want to Delete this ?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#008000',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes!',
+            cancelButtonText: 'No!'
+
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                dispatch(DeleteMaterial(id, language))
+            }
+        })
+    }
     return (
         <>
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '100px' }}>
@@ -187,7 +210,7 @@ const material = () => {
                                                 </IconButton>
                                             </Tooltip>
                                             <Tooltip title="Delete Language">
-                                                <IconButton onClick={(e) => { }}>
+                                                <IconButton onClick={(e) => { deleteMaterial(data) }}>
                                                     <DeleteIcon size={20} style={{ color: "#243556", height: "1.2rem" }} />
                                                 </IconButton>
                                             </Tooltip>

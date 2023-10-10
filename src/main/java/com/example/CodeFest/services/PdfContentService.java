@@ -45,22 +45,18 @@ public class PdfContentService {
     }
 
     // delete pdf content
-    public List<PdfContent> deletePdfContent(String id, String language) {
-        // if (pdfContentRepo.existsById(id)) {
-        //     pdfContentRepo.deleteById(id);
-        //     List<PdfContent> pdfList = pdfContentRepo.findByLanguageIn(language);
-        //     return pdfList;
-        // } else{
-        //     List<PdfContent> pdfList = pdfContentRepo.findByLanguageIn(language);
-        //     return pdfList; 
-        // }
-        return null;
+    public boolean deletePdfContent(String id) {
+        if (pdfContentRepo.existsById(id)) {
+            pdfContentRepo.deleteById(id);
+            return true;
+        } else {
+            return false;
+        }
     }
 
-    //delete all pdf content
-    public void deleteAllByLanguage (String language){
+    // delete all pdf content
+    public void deleteAllByLanguage(String language) {
         pdfContentRepo.deleteAllByLanguage(language);
     }
-
 
 }

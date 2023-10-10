@@ -126,15 +126,16 @@ export const updateMaterial = (data) => {
 }
 
 
-export const deleteMaterial = (id) => {
+export const DeleteMaterial = (id,language) => {
     return async (dispatch) => {
         try {
             dispatch({ type: materialConstants.DELETE_MATERIAL_REQUEST })
-            const res = await axios.put(`http://localhost:8080/api/pdf/delete/${id}`)
+            const res = await axios.delete(`http://localhost:8080/api/pdf/delete/${id}/${language}`)
+            console.log(res)
             if (res.status === 200) {
                 dispatch({
                     type: materialConstants.DELETE_MATERIAL_SUCCESS,
-                    // payload: res.data
+                    payload: res.data
                 })
                 Swal.fire(
                     'Deleted!',
