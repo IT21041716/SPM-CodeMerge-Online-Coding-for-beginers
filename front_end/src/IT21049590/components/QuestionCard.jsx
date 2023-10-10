@@ -35,6 +35,15 @@ const QuestionCard = ({ question }) => {
       });
     setOpen(true);
   };
+  const deleteQuestion = async (id) => {
+    const url = `http://localhost:8080/questions/delete/${id}`;
+    await axios
+      .delete(url)
+
+      .catch((er) => {
+        console.log(`error deleting answer ${er}`);
+      });
+  };
 
   const handleClose = () => {
     setOpen(false);
@@ -53,6 +62,12 @@ const QuestionCard = ({ question }) => {
             variant="outlined"
           >
             View Answers
+          </Button>
+          <Button
+            onClick={() => deleteQuestion(question.id)}
+            variant="outlined"
+          >
+            Delete
           </Button>
         </CardContent>
       </Card>
