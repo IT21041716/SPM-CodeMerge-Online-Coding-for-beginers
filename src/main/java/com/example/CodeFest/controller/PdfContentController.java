@@ -199,9 +199,13 @@ public class PdfContentController {
         return ResponseEntity.ok("Files updated successfully.");
     }
 
-    @DeleteMapping("/delete/{id}")
-    public List<PdfContent> pdfDelete(@PathVariable("id") String id, @PathVariable("language") String language)) {
-        return pdfContentService.deletePdfContent(id,language);  
+    @DeleteMapping("/delete/{id}/{language}")
+    public List<PdfContent> pdfDelete(@PathVariable("id") String id, @PathVariable("language") List<String> language){
+        System.out.println(language);
+        System.out.println(id);
+        pdfContentService.deletePdfContent(id); 
+        List<PdfContent> pdfList = pdfContentService.getByLanguage(language);
+        return pdfList;
     }
 
     @DeleteMapping("/deleteAll/{language}")

@@ -151,14 +151,12 @@ public class languageController {
                 System.out.println("Invalid file type for language image");
             }
         } else {
-            // No new language image in the request, get the previous image URL
             Languages data = languageService.getOne(id);
             languageObj.setImageUrl(data.getImageUrl());
         }
     
-        // Check if there are new cover images in the request
         if (coverImage != null) {
-            MultipartFile coverFile = coverImage[0]; // Assuming only one file is expected
+            MultipartFile coverFile = coverImage[0];
             long timestamp = System.currentTimeMillis();
             String coverFileName = timestamp + "_"
                     + StringUtils.cleanPath(Objects.requireNonNull(coverFile.getOriginalFilename()));
@@ -174,7 +172,6 @@ public class languageController {
                 System.out.println("Invalid file type for cover image");
             }
         } else {
-            // No new cover image in the request, get the previous cover image URL
             Languages data = languageService.getOne(id);
             languageObj.setCoverImageUrl(data.getCoverImageUrl());
         }

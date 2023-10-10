@@ -75,6 +75,7 @@ export default (state = initState, action) => {
             state = {
                 ...state,
                 loading: false,
+                // allMaterial: action.payload
             }
         break;
         case materialConstants.UPDATE_MATERIAL_ERROR:
@@ -93,6 +94,7 @@ export default (state = initState, action) => {
             state = {
                 ...state,
                 loading: false,
+                allMaterial: action.payload
             }
         break;
         case materialConstants.DELETE_MATERIAL_ERROR:
