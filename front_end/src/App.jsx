@@ -14,6 +14,8 @@ import Layout from "./IT21041716/scenes/dashboard/index";
 import Languages from "./IT21041716/scenes/dashboard/languages";
 import Profile from "./IT21041716/scenes/dashboard/profile";
 import Material from "./IT21041716/scenes/dashboard/material";
+import Home from './IT21041716/scenes/staticPages/home'
+import Learning from './IT21041716/scenes/staticPages/learning'
 
 import Login from "./IT21049590/components/Login";
 import Signup from "./IT21049590/components/Signup";
@@ -34,11 +36,15 @@ function App() {
       <Toaster position="top-center" reverseOrder={true} />
       <BrowserRouter>
         <Routes>
-          
+
           {/* sithanga  */}
-          <Route path="/" element={<UserMainPage />} />
+          <Route path="/language" element={<UserMainPage />} />
           <Route path="/language/:id" element={<Language />} />
           <Route path="/player/:id" element={<VedioPlayer />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/learning" element={<Learning />} />
+
+
           {/* dashboard */}
           <Route element={<Layout />}>
             <Route path="/Add New Language" element={<LanguageForm />} />

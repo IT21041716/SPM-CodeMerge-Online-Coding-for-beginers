@@ -5,7 +5,7 @@ import './index.css'
 import store from './IT21041716/stores/index.js'
 import { Provider } from 'react-redux'
 
-window.store = store;
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
   root.render(
     <Provider store ={store} >
