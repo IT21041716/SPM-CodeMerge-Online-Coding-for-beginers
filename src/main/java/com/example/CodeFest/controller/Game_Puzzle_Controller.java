@@ -131,4 +131,25 @@ public class Game_Puzzle_Controller {
 
         return t;
     }
+
+    @GetMapping("/gameModuls")
+    public ArrayList<String> getGameModules() {
+        List<Game_Puzzle> GP = gamePuzzleRepo.findAll();
+        ArrayList<String> moduleTexts = new ArrayList<>();
+
+    for (Game_Puzzle module : GP) {
+        moduleTexts.add(module.getGameModuleTopic());
+    }
+
+    return moduleTexts;
+    }
+
+     @GetMapping("/gameTopic/{gameModuleTopic}")
+    public String getGameModules(@PathVariable("gameModuleTopic") String gameModuleTopic) {
+        Game_Puzzle GP = gamePuzzleRepo.findByGameModuleTopic(gameModuleTopic).get(0);
+        
+
+    return GP.getGameId();
+    }
+
 }

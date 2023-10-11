@@ -4,6 +4,7 @@ import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import axios from "axios";
+import logo from '../assets/IT21041716/logo2.png'
 
 export default function AddGamePluzzle() {
   const [gameModuleName, setGameModuleName] = useState("");
@@ -11,6 +12,10 @@ export default function AddGamePluzzle() {
   const [gameText, setGameTexts] = useState([]);
   const [question, setQuestion] = useState("");
   const [codeNo, setCodeNo] = useState(0);
+
+  const logout = () => {
+    dispatch(signout());
+};
 
   const display = () => {
     console.log(gameModuleName);
@@ -51,6 +56,83 @@ export default function AddGamePluzzle() {
 
   console.log(gameText);
   return (
+    <div>
+      <aside className="left-sidebar">
+                    {/* <!-- Sidebar scroll--> */}
+                    <div>
+                        <div className="brand-logo d-flex align-items-center justify-content-between">
+                            <a href="/" className="text-nowrap logo-img">
+                                <img src={logo} width="180" alt="" style={{ marginTop: '2rem' }} />
+                            </a>
+                            <div className="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
+                                <i className="ti ti-x fs-8"></i>
+                            </div>
+                        </div>
+                        {/* <!-- Sidebar navigation--> */}
+                        <nav className="sidebar-nav scroll-sidebar" data-simplebar="">
+                            <ul id="sidebarnav">
+                                <li className="nav-small-cap">
+                                    <i className="ti ti-dots nav-small-cap-icon fs-4"></i>
+                                    <span className="hide-menu" >Home</span>
+                                </li>
+                                <li className="sidebar-item">
+                                    <a className="sidebar-link" href="/" aria-expanded="false">
+                                        <span>
+                                            <i className="ti ti-layout-dashboard"></i>
+                                        </span>
+                                        <span className="hide-menu">Dashboard</span>
+                                    </a>
+                                </li>
+                                <li className="nav-small-cap">
+                                    <i className="ti ti-dots nav-small-cap-icon fs-4"></i>
+                                    <span className="hide-menu">COMPONENTS</span>
+                                </li>
+                                <li className="sidebar-item">
+                                    <a className="sidebar-link" href="/languages" aria-expanded="false">
+                                        <span>
+                                            <i className="ti ti-article"></i>
+                                        </span>
+                                        <span className="hide-menu">Languages</span>
+                                    </a>
+                                </li>
+                                <li className="sidebar-item">
+                                    <a className="sidebar-link" href="/newLanguage" aria-expanded="false">
+                                        <span>
+                                            <i className="ti ti-alert-circle"></i>
+                                        </span>
+                                        <span className="hide-menu">Add New Language</span>
+                                    </a>
+                                </li>
+                                <li className="sidebar-item">
+                                    <a className="sidebar-link" href="/game/view" aria-expanded="false">
+                                        <span>
+                                            <i className="ti ti-cards"></i>
+                                        </span>
+                                        <span className="hide-menu">Game Center</span>
+                                    </a>
+                                </li>
+                                <li className="nav-small-cap">
+                                    <i className="ti ti-dots nav-small-cap-icon fs-4"></i>
+                                    <span className="hide-menu">ACTIONS</span>
+                                </li>
+                                <li className="sidebar-item">
+                                    <button onClick={logout} className="sidebar-link" href="./authentication-login.html" aria-expanded="false">
+                                        <span>
+                                            <i className="ti ti-login"></i>
+                                        </span>
+                                        <span className="hide-menu">Logout</span>
+                                    </button>
+                                </li>
+                            </ul>
+                            <div >
+
+                            </div>
+                        </nav>
+                        {/* <!-- End Sidebar navigation --> */}
+                    </div>
+                    {/* <!-- End Sidebar scroll--> */}
+                </aside>
+    <div style={{paddingLeft:'300px'}}>           
     <div style={Styles.bodyStyle}>
       <br />
       <div style={Styles.secondDiv}>
@@ -465,6 +547,8 @@ export default function AddGamePluzzle() {
         <br/>
       </div>
       <br/>
+    </div>
+    </div> 
     </div>
   );
 }

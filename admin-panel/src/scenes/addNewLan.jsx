@@ -148,6 +148,14 @@ const addNewLan = () => {
                                         <span className="hide-menu">Add New Language</span>
                                     </a>
                                 </li>
+                                <li className="sidebar-item">
+                                    <a className="sidebar-link" href="/game/view" aria-expanded="false">
+                                        <span>
+                                            <i className="ti ti-cards"></i>
+                                        </span>
+                                        <span className="hide-menu">Game Center</span>
+                                    </a>
+                                </li>
                                 <li className="nav-small-cap">
                                     <i className="ti ti-dots nav-small-cap-icon fs-4"></i>
                                     <span className="hide-menu">ACTIONS</span>
