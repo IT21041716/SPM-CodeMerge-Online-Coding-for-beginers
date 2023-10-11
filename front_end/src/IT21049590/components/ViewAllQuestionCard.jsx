@@ -17,6 +17,8 @@ import AnswerIcon from "@mui/icons-material/Forum";
 import AddIcon from "@mui/icons-material/Add";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import Avatar from "@mui/material/Avatar";
+import { CardMedia } from "@mui/material";
 
 const QuestionCard = ({ question, userId }) => {
   const [open, setOpen] = useState(false);
@@ -30,7 +32,9 @@ const QuestionCard = ({ question, userId }) => {
   const handleClickOpen = async (id) => {
     try {
       setLoading(true);
-      const response = await axios.get(`http://localhost:8080/answers/question/${id}`);
+      const response = await axios.get(
+        `http://localhost:8080/answers/question/${id}`
+      );
       setAnswers(response.data);
       setLoading(false);
       setOpen(true);
@@ -78,7 +82,9 @@ const QuestionCard = ({ question, userId }) => {
     try {
       await axios.delete(`http://localhost:8080/answers/delete/${id}`);
       setLoading(true);
-      const response = await axios.get(`http://localhost:8080/answers/question/${question.id}`);
+      const response = await axios.get(
+        `http://localhost:8080/answers/question/${question.id}`
+      );
       setAnswers(response.data);
       setLoading(false);
     } catch (error) {
@@ -88,13 +94,18 @@ const QuestionCard = ({ question, userId }) => {
 
   const updateAnswer = async (id) => {
     try {
-      const response = await axios.put(`http://localhost:8080/answers/edit/${id}`, {
-        content: answer,
-        question: selectedQuestion,
-        user: await getUserById(),
-      });
+      const response = await axios.put(
+        `http://localhost:8080/answers/edit/${id}`,
+        {
+          content: answer,
+          question: selectedQuestion,
+          user: await getUserById(),
+        }
+      );
       setLoading(true);
-      const answersResponse = await axios.get(`http://localhost:8080/answers/question/${question.id}`);
+      const answersResponse = await axios.get(
+        `http://localhost:8080/answers/question/${question.id}`
+      );
       setAnswers(answersResponse.data);
       setLoading(false);
     } catch (error) {
@@ -110,8 +121,16 @@ const QuestionCard = ({ question, userId }) => {
     <>
       <Card sx={{ marginBottom: 2 }}>
         <CardContent>
+          <Avatar sx={{ width: 100, height: 100, marginBottom: 2 }}>
+            <CardMedia
+              component="img"
+              height="100"
+              image={`../../../public/hirunaUploadsUserImages/${question.user.image}`}
+              alt={question.user.firstName}
+            />
+          </Avatar>
           <Typography variant="h6" gutterBottom>
-            <strong>User:</strong> {question.user.firstName}
+             {question.user.firstName} {question.user.lastName}
           </Typography>
           <Typography variant="h5" component="div" gutterBottom>
             {question.title}
@@ -143,11 +162,21 @@ const QuestionCard = ({ question, userId }) => {
           <Grid container spacing={2}>
             {answers.map((ans, index) => (
               <Grid item xs={12} key={index}>
+                <Avatar sx={{ width: 50, height: 50, marginBottom: 2 }}>
+                  <CardMedia
+                    component="img"
+                    height="50"
+                    image={`../../../public/hirunaUploadsUserImages/${ans.user.image}`}
+                    alt={ans.user.firstName}
+                  />
+                </Avatar>
                 <Typography variant="subtitle1">
-                  <strong>User:</strong> {ans.user.firstName}
+                  <strong>User:</strong> {ans.user.firstName} {ans.user.lastName}
                 </Typography>
                 {ans.user.id !== params.userId && (
-                  <Typography variant="body1"><strong>Answer:</strong> {ans.content}</Typography>
+                  <Typography variant="body1">
+                    <strong>Answer:</strong> {ans.content}
+                  </Typography>
                 )}
                 {ans.user.id === params.userId && (
                   <Input

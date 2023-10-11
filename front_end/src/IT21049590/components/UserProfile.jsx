@@ -1,7 +1,6 @@
-// UserProfile.js
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useParams, Link } from "react-router-dom";
-import React, { useState, useEffect } from "react";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
@@ -16,6 +15,8 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import QuestionAnswerIcon from "@mui/icons-material/QuestionAnswer";
 import PlaylistPlayIcon from "@mui/icons-material/PlaylistPlay";
+import { CardMedia } from "@mui/material";
+import "./UserProfile.css";
 
 const UserProfile = () => {
   const { userId } = useParams();
@@ -61,26 +62,42 @@ const UserProfile = () => {
 
   return (
     <div className="user-profile-container">
-      <Avatar sx={{ width: 100, height: 100, marginBottom: 2 }}>
-        <AccountCircleIcon fontSize="large" />
-      </Avatar>
-      <h2>{user.firstName} {user.lastName}</h2>
-      <p>Email: {user.email}</p>
+      <div class="profile">
+        <center>
+          <Avatar sx={{ width: 100, height: 100, marginBottom: 2 }}>
+            <CardMedia
+              component="img"
+              height="100"
+              image={`../../../public/hirunaUploadsUserImages/${user.image}`}
+              alt={user.firstName}
+            />
+          </Avatar>
+        </center>
 
-      <div className="user-actions">
-        <Link to={`/question/${userId}`}>
-          <Button variant="outlined" startIcon={<QuestionAnswerIcon />}>
-            View Questions
+        <h2>
+          {user.firstName} {user.lastName}
+        </h2>
+        <p>Email: {user.email}</p>
+
+        <div className="user-actions">
+          <Link to={`/question/${userId}`}>
+            <Button variant="outlined" startIcon={<QuestionAnswerIcon />}>
+              View Questions
+            </Button>
+          </Link>
+          <Button
+            variant="outlined"
+            onClick={openAddQuestionDialog}
+            startIcon={<PlaylistPlayIcon />}
+          >
+            Add Questions
           </Button>
-        </Link>
-        <Button variant="contained" color="primary" onClick={openAddQuestionDialog} startIcon={<PlaylistPlayIcon />}>
-          Add Questions
-        </Button>
-        <Link to={`/viewAllQuestions/${userId}`}>
-          <Button variant="outlined" startIcon={<PlaylistPlayIcon />}>
-            View All Questions
-          </Button>
-        </Link>
+          <Link to={`/viewAllQuestions/${userId}`}>
+            <Button variant="outlined" startIcon={<PlaylistPlayIcon />}>
+              View All Questions
+            </Button>
+          </Link>
+        </div>
       </div>
 
       {/* AddQuestion Dialog */}

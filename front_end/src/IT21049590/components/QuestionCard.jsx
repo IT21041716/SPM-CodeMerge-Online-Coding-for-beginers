@@ -13,6 +13,8 @@ import Grid from "@mui/material/Grid";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ForumIcon from "@mui/icons-material/Forum";
 import axios from "axios";
+import Avatar from "@mui/material/Avatar";
+import { CardMedia } from "@mui/material";
 
 const QuestionCard = ({ question }) => {
   const [open, setOpen] = useState(false);
@@ -20,7 +22,9 @@ const QuestionCard = ({ question }) => {
 
   const handleClickOpen = async (id) => {
     try {
-      const response = await axios.get(`http://localhost:8080/answers/question/${id}`);
+      const response = await axios.get(
+        `http://localhost:8080/answers/question/${id}`
+      );
       setAnswers(response.data);
       setOpen(true);
     } catch (error) {
@@ -76,8 +80,16 @@ const QuestionCard = ({ question }) => {
             <Grid container spacing={2}>
               {answers.map((ansers, index) => (
                 <Grid item xs={12} key={index}>
+                  <Avatar sx={{ width: 100, height: 100, marginBottom: 2 }}>
+                    <CardMedia
+                      component="img"
+                      height="100"
+                      image={`../../../public/hirunaUploadsUserImages/${ansers.user.image}`}
+                      alt={ansers.user.firstName}
+                    />
+                  </Avatar>
                   <Typography variant="subtitle1">
-                    <strong>User:</strong> {ansers.user.firstName}
+                    <strong>User</strong> {ansers.user.firstName}
                   </Typography>
                   <Typography variant="body1">
                     <strong>Answer:</strong> {ansers.content}
