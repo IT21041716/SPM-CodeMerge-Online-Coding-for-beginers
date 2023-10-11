@@ -1,12 +1,27 @@
-// UserProfile.js
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useParams, Link } from "react-router-dom";
-import React, { useState, useEffect } from "react";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogActions from "@mui/material/DialogActions";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import Box from "@mui/material/Box";
+import AddQuestion from "./AddQuestion";
+import Avatar from "@mui/material/Avatar";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import QuestionAnswerIcon from "@mui/icons-material/QuestionAnswer";
+import PlaylistPlayIcon from "@mui/icons-material/PlaylistPlay";
+import { CardMedia } from "@mui/material";
+import "./UserProfile.css";
 
-const UserProfile = ({}) => {
+const UserProfile = () => {
   const { userId } = useParams();
   const [user, setUser] = useState([]);
-  const [isAddQuestionDialogOpen, setIsAddQuestionDialogOpen] = useState(false); // Manage dialog state
+  const [isAddQuestionDialogOpen, setIsAddQuestionDialogOpen] = useState(false);
 
   const navigate = useNavigate();
 
@@ -15,62 +30,88 @@ const UserProfile = ({}) => {
       .get(`http://localhost:8080/user/${userId}`)
       .then((response) => {
         setUser(response.data);
-
         console.log(response);
       })
       .catch((error) => {
         console.log(error);
       });
   }, []);
+
   const handleUpdate = () => {
-    // Navigate to an update page or component where the user can edit their details
-    // You can pass the user object or user ID to the update page if needed
     navigate(`/updateUser/${userId}`);
   };
 
   const handleDelete = () => {
-    // Send a request to delete the user's account
     axios
       .delete(`http://localhost:8080/user/${userId}`)
       .then(() => {
-        // Redirect to a success page or perform any necessary actions
         alert("User Deleted");
       })
       .catch((error) => {
         console.log(error);
-        // Handle error or display a message to the user
       });
   };
+
   const openAddQuestionDialog = () => {
     setIsAddQuestionDialogOpen(true);
   };
 
-  // Function to close the Add Question dialog
   const closeAddQuestionDialog = () => {
     setIsAddQuestionDialogOpen(false);
   };
 
   return (
-    <div>
-      <h2>User Profile</h2>
-      <p>First Name: {user.firstName}</p>
-      <p>Last Name: {user.lastName}</p>
-      <p>Email: {user.email}</p>
-      <p>Contact No: {user.contactNo}</p>
-      <p>Image: {user.image}</p>
-      {/* You can display additional user details here */}
-      <button onClick={handleUpdate}>Update</button>
-      <button onClick={handleDelete}>Delete</button>
-      <Link to={`/question/${userId}`}>
-        <button>View Questions</button>
-      </Link>
-      <Link to={`/addQuestion/${userId}`}>
-        <button>Add Questions</button>
-      </Link>
-      
-      <Link to={`/viewAllQuestions/${userId}`}>
-        <button>View All Questions</button>
-      </Link>
+    <div className="user-profile-container">
+      <div class="profile">
+        <center>
+          <Avatar sx={{ width: 100, height: 100, marginBottom: 2 }}>
+            <CardMedia
+              component="img"
+              height="100"
+              image={`../../../public/hirunaUploadsUserImages/${user.image}`}
+              alt={user.firstName}
+            />
+          </Avatar>
+        </center>
+
+        <h2>
+          {user.firstName} {user.lastName}
+        </h2>
+        <p>Email: {user.email}</p>
+
+        <div className="user-actions">
+          <Link to={`/question/${userId}`}>
+            <Button variant="outlined" startIcon={<QuestionAnswerIcon />}>
+              View Questions
+            </Button>
+          </Link>
+          <Button
+            variant="outlined"
+            onClick={openAddQuestionDialog}
+            startIcon={<PlaylistPlayIcon />}
+          >
+            Add Questions
+          </Button>
+          <Link to={`/viewAllQuestions/${userId}`}>
+            <Button variant="outlined" startIcon={<PlaylistPlayIcon />}>
+              View All Questions
+            </Button>
+          </Link>
+        </div>
+      </div>
+
+      {/* AddQuestion Dialog */}
+      <Dialog open={isAddQuestionDialogOpen} onClose={closeAddQuestionDialog}>
+        <DialogTitle>Add Question</DialogTitle>
+        <DialogContent>
+          <AddQuestion userId={userId} onClose={closeAddQuestionDialog} />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={closeAddQuestionDialog} color="secondary">
+            Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };

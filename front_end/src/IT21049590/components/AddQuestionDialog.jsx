@@ -5,6 +5,8 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
+import AddIcon from '@mui/icons-material/Add';
+import CancelIcon from '@mui/icons-material/Cancel';
 
 const AddQuestionDialog = ({ open, onClose, onSubmit }) => {
   const [title, setTitle] = useState('');
@@ -31,7 +33,10 @@ const AddQuestionDialog = ({ open, onClose, onSubmit }) => {
 
   return (
     <Dialog open={open} onClose={handleClose}>
-      <DialogTitle>Add a New Question</DialogTitle>
+      <DialogTitle style={{ borderBottom: '1px solid #ccc' }}>
+        <span style={{ marginRight: '8px' }}>Add a New Question</span>
+        <AddIcon fontSize="small" color="primary" />
+      </DialogTitle>
       <DialogContent>
         <TextField
           autoFocus
@@ -54,10 +59,14 @@ const AddQuestionDialog = ({ open, onClose, onSubmit }) => {
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose} color="primary">
+        <Button
+          onClick={handleClose}
+          color="secondary"
+          startIcon={<CancelIcon />}
+        >
           Cancel
         </Button>
-        <Button onClick={handleSubmit} color="primary">
+        <Button onClick={handleSubmit} color="primary" startIcon={<AddIcon />}>
           Submit
         </Button>
       </DialogActions>

@@ -5,109 +5,254 @@ import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
+import Input from "@mui/material/Input";
 import DialogTitle from "@mui/material/DialogTitle";
-import { Link } from "react-router-dom";
-import axios from "axios";
 import Grid from "@mui/material/Grid";
-const ViewAllQuestionCard = ({ question, userId }) => {
+import CircularProgress from "@mui/material/CircularProgress";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import SendIcon from "@mui/icons-material/Send";
+import CloseIcon from "@mui/icons-material/Close";
+import AnswerIcon from "@mui/icons-material/Forum";
+import AddIcon from "@mui/icons-material/Add";
+import axios from "axios";
+import { useParams } from "react-router-dom";
+import Avatar from "@mui/material/Avatar";
+import { CardMedia } from "@mui/material";
+
+const QuestionCard = ({ question, userId }) => {
   const [open, setOpen] = useState(false);
-  const [anser, setAnser] = useState([]);
+  const [openAnswerBox, setOpenAnswerBox] = useState(false);
+  const [answers, setAnswers] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [answer, setAnswer] = useState("");
+  const params = useParams();
+  const [selectedQuestion, setSelectedQuestion] = useState(null);
 
-  const handleClickOpen = (id) => {
-    const apiUrl = `http://localhost:8080/answers/question/${id}`;
-
-    axios
-      .get(apiUrl)
-      .then((response) => {
-        // Handle the successful response here
-        setAnser(response.data);
-        console.log("Details:", anser);
-
-        // You can use 'details' to display or manipulate the data as needed
-      })
-      .catch((error) => {
-        // Handle any errors that occur during the request
-        console.error("Error fetching details:", error);
-      });
-    setOpen(true);
+  const handleClickOpen = async (id) => {
+    try {
+      setLoading(true);
+      const response = await axios.get(
+        `http://localhost:8080/answers/question/${id}`
+      );
+      setAnswers(response.data);
+      setLoading(false);
+      setOpen(true);
+    } catch (error) {
+      console.error("Error fetching answers:", error);
+      setLoading(false);
+    }
   };
-  const handleAddAnserClickOpen = (id,userId) => {
-    const apiUrl = `http://localhost:8080/answers/post`;
 
-    axios
-      .post(apiUrl)
-      .then((response) => {
-        // Handle the successful response here
-        setAnser(response.data);
-        console.log("Details:", anser);
+  const handleAddAnswerClickOpen = (question) => {
+    setSelectedQuestion(question);
+    setOpenAnswerBox(true);
+  };
 
-        // You can use 'details' to display or manipulate the data as needed
-      })
-      .catch((error) => {
-        // Handle any errors that occur during the request
-        console.error("Error fetching details:", error);
+  const addAnswer = async () => {
+    try {
+      const response = await axios.post("http://localhost:8080/answers/post", {
+        content: answer,
+        question: selectedQuestion,
+        user: await getUserById(),
       });
-      
-    setOpen(true);
+      setOpenAnswerBox(false);
+    } catch (error) {
+      console.error("Error adding answer:", error);
+    }
   };
 
   const handleClose = () => {
     setOpen(false);
+    setOpenAnswerBox(false);
   };
+
+  const getUserById = async () => {
+    try {
+      const uid = params.userId;
+      const response = await axios.get(`http://localhost:8080/user/${uid}`);
+      return response.data;
+    } catch (error) {
+      console.log("Error fetching user:", error);
+      return null;
+    }
+  };
+
+  const deleteAnswer = async (id) => {
+    try {
+      await axios.delete(`http://localhost:8080/answers/delete/${id}`);
+      setLoading(true);
+      const response = await axios.get(
+        `http://localhost:8080/answers/question/${question.id}`
+      );
+      setAnswers(response.data);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error deleting answer:", error);
+    }
+  };
+
+  const updateAnswer = async (id) => {
+    try {
+      const response = await axios.put(
+        `http://localhost:8080/answers/edit/${id}`,
+        {
+          content: answer,
+          question: selectedQuestion,
+          user: await getUserById(),
+        }
+      );
+      setLoading(true);
+      const answersResponse = await axios.get(
+        `http://localhost:8080/answers/question/${question.id}`
+      );
+      setAnswers(answersResponse.data);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error updating answer:", error);
+    }
+  };
+
+  if (loading) {
+    return <CircularProgress />;
+  }
 
   return (
     <>
-      <Card>
+      <Card sx={{ marginBottom: 2 }}>
         <CardContent>
-          <Typography variant="h5" component="div">
-            <p>User : {question.user.firstName}</p>
+          <Avatar sx={{ width: 100, height: 100, marginBottom: 2 }}>
+            <CardMedia
+              component="img"
+              height="100"
+              image={`../../../public/hirunaUploadsUserImages/${question.user.image}`}
+              alt={question.user.firstName}
+            />
+          </Avatar>
+          <Typography variant="h6" gutterBottom>
+             {question.user.firstName} {question.user.lastName}
           </Typography>
-          <Typography variant="h5" component="div">
+          <Typography variant="h5" component="div" gutterBottom>
             {question.title}
           </Typography>
-          <Typography color="text.secondary">{question.content}</Typography>
+          <Typography color="text.secondary" paragraph>
+            {question.content}
+          </Typography>
           <Button
-            onClick={() => handleClickOpen(question.id)}
             variant="outlined"
+            onClick={() => handleClickOpen(question.id)}
+            startIcon={<AnswerIcon />}
           >
             View Answers
           </Button>
           <Button
-            onClick={() => handleAddAnserClickOpen(question.id,userId)}
             variant="outlined"
+            onClick={() => handleAddAnswerClickOpen(question)}
+            startIcon={<AddIcon />}
           >
             Add Answer
           </Button>
         </CardContent>
       </Card>
-      <br />
 
+      {/* Answers Dialog */}
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Answers</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            <Grid container spacing={2}>
-              {anser.map((ansers, index) => (
-                <Grid item xs={12} key={index}>
-                  <p>User : {ansers.user.firstName}</p>
-                  <p>Anser : {ansers.content}</p>
-                </Grid>
-              ))}
-            </Grid>
-          </DialogContentText>
-          {/* You can add your answer form or display answers here */}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Close
-          </Button>
-        </DialogActions>
+        <div style={{ width: 400, padding: 16 }}>
+          <DialogTitle>Answers</DialogTitle>
+          <Grid container spacing={2}>
+            {answers.map((ans, index) => (
+              <Grid item xs={12} key={index}>
+                <Avatar sx={{ width: 50, height: 50, marginBottom: 2 }}>
+                  <CardMedia
+                    component="img"
+                    height="50"
+                    image={`../../../public/hirunaUploadsUserImages/${ans.user.image}`}
+                    alt={ans.user.firstName}
+                  />
+                </Avatar>
+                <Typography variant="subtitle1">
+                  <strong>User:</strong> {ans.user.firstName} {ans.user.lastName}
+                </Typography>
+                {ans.user.id !== params.userId && (
+                  <Typography variant="body1">
+                    <strong>Answer:</strong> {ans.content}
+                  </Typography>
+                )}
+                {ans.user.id === params.userId && (
+                  <Input
+                    sx={{ width: "100%" }}
+                    defaultValue={ans.content}
+                    onChange={(e) => setAnswer(e.target.value)}
+                    placeholder="Answer"
+                  />
+                )}
+                <div style={{ height: 12 }} />
+                {ans.user.id === params.userId && (
+                  <div style={{ display: "flex" }}>
+                    <Button
+                      variant="outlined"
+                      onClick={() => updateAnswer(ans.id)}
+                      startIcon={<SendIcon />}
+                    >
+                      Update
+                    </Button>
+                    <div style={{ width: 12 }} />
+                    <Button
+                      variant="outlined"
+                      onClick={() => deleteAnswer(ans.id)}
+                      startIcon={<DeleteIcon />}
+                    >
+                      Delete
+                    </Button>
+                  </div>
+                )}
+              </Grid>
+            ))}
+          </Grid>
+          <div style={{ display: "flex", height: 50, marginTop: 12 }}>
+            <Button
+              sx={{ flex: 1 }}
+              variant="outlined"
+              onClick={handleClose}
+              startIcon={<CloseIcon />}
+            >
+              Close
+            </Button>
+          </div>
+        </div>
+      </Dialog>
+
+      {/* Add Answer Dialog */}
+      <Dialog open={openAnswerBox} onClose={handleClose}>
+        <div style={{ width: 400, padding: 16 }}>
+          <DialogTitle>Add Your Answer</DialogTitle>
+          <Input
+            onChange={(e) => setAnswer(e.target.value)}
+            placeholder="Answer"
+          />
+          <div style={{ display: "flex", height: 50, marginTop: 12 }}>
+            <Button
+              sx={{ flex: 1 }}
+              variant="outlined"
+              onClick={handleClose}
+              startIcon={<CloseIcon />}
+            >
+              Close
+            </Button>
+            <div style={{ width: 12 }} />
+            <Button
+              sx={{ flex: 1 }}
+              variant="outlined"
+              onClick={addAnswer}
+              startIcon={<SendIcon />}
+            >
+              Add Answer
+            </Button>
+          </div>
+        </div>
       </Dialog>
     </>
   );
 };
 
-export default ViewAllQuestionCard;
+export default QuestionCard;
