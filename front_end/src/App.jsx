@@ -6,14 +6,8 @@ import { Toaster } from "react-hot-toast";
 
 //sithanga
 import UserMainPage from "./IT21041716/scenes/userMain";
-import LanguageForm from "./IT21041716/scenes/dashboard/newLanguage";
 import Language from "./IT21041716/scenes/singleLanguage";
-import NewMaterial from "./IT21041716/scenes/addNewMaterial";
 import VedioPlayer from "./IT21041716/scenes/vedioPlayer";
-import Layout from "./IT21041716/scenes/dashboard/index";
-import Languages from "./IT21041716/scenes/dashboard/languages";
-import Profile from "./IT21041716/scenes/dashboard/profile";
-import Material from "./IT21041716/scenes/dashboard/material";
 import Home from './IT21041716/scenes/staticPages/home'
 import Learning from './IT21041716/scenes/staticPages/learning'
 
@@ -41,17 +35,14 @@ function App() {
           <Route path="/language" element={<UserMainPage />} />
           <Route path="/language/:id" element={<Language />} />
           <Route path="/player/:id" element={<VedioPlayer />} />
+
+
+
+          
           <Route path="/" element={<Home />} />
           <Route path="/learning" element={<Learning />} />
 
-
-          {/* dashboard */}
-          <Route element={<Layout />}>
-            <Route path="/Add New Language" element={<LanguageForm />} />
-            <Route path="/Material/:language" element={<Material />} />
-            <Route path="/Languages" element={<Languages />} />
-            <Route path="/admin" element={<Profile />} />
-          </Route>
+          {/* end sithanga */}
 
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />

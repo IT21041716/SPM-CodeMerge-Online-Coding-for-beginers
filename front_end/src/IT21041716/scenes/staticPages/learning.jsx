@@ -1,8 +1,15 @@
 import React from 'react'
+import Header from './Header'
+import Footer from './footer'
 
 const learning = () => {
   return (
-    <div>learning</div>
+    <>
+      <Header />
+
+      <Footer />
+
+    </>
   )
 }
 
