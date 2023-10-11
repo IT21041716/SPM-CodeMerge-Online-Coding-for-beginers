@@ -9,40 +9,32 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { Link } from "react-router-dom";
-import axios from "axios";
 import Grid from "@mui/material/Grid";
+import DeleteIcon from "@mui/icons-material/Delete";
+import ForumIcon from "@mui/icons-material/Forum";
+import axios from "axios";
+
 const QuestionCard = ({ question }) => {
   const [open, setOpen] = useState(false);
-  const [anser, setAnser] = useState([]);
+  const [answers, setAnswers] = useState([]);
 
-  const handleClickOpen = (id) => {
-    const apiUrl = `http://localhost:8080/answers/question/${id}`;
-
-    // Make an HTTP GET request to the API
-    axios
-      .get(apiUrl)
-      .then((response) => {
-        // Handle the successful response here
-        setAnser(response.data);
-        console.log("Details:", anser);
-
-        // You can use 'details' to display or manipulate the data as needed
-      })
-      .catch((error) => {
-        // Handle any errors that occur during the request
-        console.error("Error fetching details:", error);
-      });
-    setOpen(true);
+  const handleClickOpen = async (id) => {
+    try {
+      const response = await axios.get(`http://localhost:8080/answers/question/${id}`);
+      setAnswers(response.data);
+      setOpen(true);
+    } catch (error) {
+      console.error("Error fetching answers:", error);
+    }
   };
+
   const deleteQuestion = async (id) => {
     const url = `http://localhost:8080/questions/delete/${id}`;
-    await axios
-      .delete(url)
-
-      .catch((er) => {
-        console.log(`error deleting answer ${er}`);
-      });
+    try {
+      await axios.delete(url);
+    } catch (error) {
+      console.log(`Error deleting question ${error}`);
+    }
   };
 
   const handleClose = () => {
@@ -56,16 +48,20 @@ const QuestionCard = ({ question }) => {
           <Typography variant="h5" component="div">
             {question.title}
           </Typography>
-          <Typography color="text.secondary">{question.content}</Typography>
+          <Typography color="text.secondary" paragraph>
+            {question.content}
+          </Typography>
           <Button
             onClick={() => handleClickOpen(question.id)}
             variant="outlined"
+            startIcon={<ForumIcon />}
           >
             View Answers
           </Button>
           <Button
             onClick={() => deleteQuestion(question.id)}
             variant="outlined"
+            startIcon={<DeleteIcon />}
           >
             Delete
           </Button>
@@ -78,10 +74,14 @@ const QuestionCard = ({ question }) => {
         <DialogContent>
           <DialogContentText>
             <Grid container spacing={2}>
-              {anser.map((ansers, index) => (
+              {answers.map((ansers, index) => (
                 <Grid item xs={12} key={index}>
-                  <p>User : {ansers.user.firstName}</p>
-                  <p>Anser : {ansers.content}</p>
+                  <Typography variant="subtitle1">
+                    <strong>User:</strong> {ansers.user.firstName}
+                  </Typography>
+                  <Typography variant="body1">
+                    <strong>Answer:</strong> {ansers.content}
+                  </Typography>
                 </Grid>
               ))}
             </Grid>

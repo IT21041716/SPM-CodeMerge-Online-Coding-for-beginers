@@ -4,6 +4,8 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import SendIcon from "@mui/icons-material/Send";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
 const AddQuestion = ({ userId, onClose }) => {
   const [title, setTitle] = useState("");
@@ -75,10 +77,29 @@ const AddQuestion = ({ userId, onClose }) => {
 
       <br></br>
       <div style={{ display: "flex", justifyContent: "center" }}>
-        <Button variant="contained" color="primary" type="submit">
+        <Button
+          variant="contained"
+          color="primary"
+          type="submit"
+          startIcon={<SendIcon />}
+        >
           Submit
         </Button>
       </div>
+
+      {/* Optional: Add a button for additional functionality */}
+      {/* <div style={{ marginTop: "20px" }}>
+        <Button
+          variant="outlined"
+          color="secondary"
+          startIcon={<AddCircleOutlineIcon />}
+          onClick={() => {
+            // Add your custom functionality here
+          }}
+        >
+          Additional Action
+        </Button>
+      </div> */}
     </Box>
   );
 };
