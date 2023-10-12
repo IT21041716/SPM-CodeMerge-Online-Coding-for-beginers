@@ -18,6 +18,7 @@ import PlaylistPlayIcon from "@mui/icons-material/PlaylistPlay";
 import { CardMedia } from "@mui/material";
 import "./UserProfile.css";
 import Header from "../../IT21041716/scenes/staticPages/Header";
+import Footer from "../../IT21041716/scenes/staticPages/footer";
 
 const UserProfile = () => {
   const { userId } = useParams();
@@ -62,7 +63,7 @@ const UserProfile = () => {
   };
 
   return (
-    <div style={{ backgroundColor: 'lightblue' }}>
+    <div style={{ backgroundColor: 'white' }}>
       <Header/>
     <div className="user-profile-container">
       
@@ -117,6 +118,7 @@ const UserProfile = () => {
         </DialogActions>
       </Dialog>
     </div>
+    {/* <Footer/> */}
     </div>
   );
 };
