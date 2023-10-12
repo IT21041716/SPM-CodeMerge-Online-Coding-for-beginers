@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import './staticPages/common.css'
+import './common.css'
 import { toast } from 'react-hot-toast'
 import { Link, useParams } from 'react-router-dom'
 import pdf from '../../assets/IT21041716/pdf.jpeg'

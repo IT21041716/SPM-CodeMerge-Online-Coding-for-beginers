@@ -3,7 +3,8 @@ import { useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import ReactPlayer from 'react-player'
 import { getByID } from '../actions/materialAction'
-import './common.css'
+import './staticPages/common.css'
+
 
 const vedioPlayer = () => {
     const useparams = useParams();
