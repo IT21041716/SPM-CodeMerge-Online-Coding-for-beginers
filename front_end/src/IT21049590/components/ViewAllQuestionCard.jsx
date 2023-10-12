@@ -19,6 +19,7 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
 import { CardMedia } from "@mui/material";
+import Header from "../../IT21041716/scenes/staticPages/Header";
 
 const QuestionCard = ({ question, userId }) => {
   const [open, setOpen] = useState(false);
@@ -118,7 +119,8 @@ const QuestionCard = ({ question, userId }) => {
   }
 
   return (
-    <>
+    <div>
+    {/* <Header/> */}
       <Card sx={{ marginBottom: 2 }}>
         <CardContent>
           <Grid container alignItems="center" spacing={2}>
@@ -275,7 +277,7 @@ const QuestionCard = ({ question, userId }) => {
           </div>
         </div>
       </Dialog>
-    </>
+    </div>
   );
 };
 

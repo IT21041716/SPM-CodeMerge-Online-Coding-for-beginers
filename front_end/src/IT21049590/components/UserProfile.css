@@ -7,6 +7,10 @@
 } */
 
 .user-profile-container {
+  background-color: rgb(25, 37, 41);
+  background: rgba(0, 128, 0, 0.3);
+  /* background-image: url(""); */
+  
   display: flex;
   align-items: center;
   justify-content: center;
