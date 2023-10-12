@@ -24,6 +24,7 @@ const Login = () => {
         // Login successful, you can navigate to the user's dashboard or perform other actions here.
         console.log("Login successful")
         localStorage.setItem("email", email)
+        localStorage.setItem("userId", response.data.id)
         navigate(`/userProfile/${response.data.id}`);
 
       } else {

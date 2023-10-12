@@ -26,6 +26,17 @@ const dashboard = () => {
     const logout = () => {
         dispatch(signout());
     };
+
+    
+
+
+
+
+
+
+
+
+
     if (!authenticated) {
         return <Navigate to='/login' />
     }
@@ -178,14 +189,7 @@ const dashboard = () => {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="col-lg-12">
-                                    {/* <!-- Monthly Earnings --> */}
-                                    <div className="card">
-                                        <div className="card-body">
-
-                                        </div>
-                                    </div>
-                                </div>
+         
                             </div>
                         </div>
                     </div>

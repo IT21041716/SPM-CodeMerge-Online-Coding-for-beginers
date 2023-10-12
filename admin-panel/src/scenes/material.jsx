@@ -19,6 +19,7 @@ const Material = () => {
     const useparams = useParams();
     const allMaterial = useSelector((state) => state.material.allMaterial)
     const loading = useSelector((state) => state.material.loading)
+    const user = useSelector((state) => state.auth.user)
 
 
     useEffect(() => {
@@ -236,6 +237,14 @@ const Material = () => {
                                         <span className="hide-menu">Add New Language</span>
                                     </a>
                                 </li>
+                                <li className="sidebar-item">
+                                    <a className="sidebar-link" href="/game/view" aria-expanded="false">
+                                        <span>
+                                            <i className="ti ti-cards"></i>
+                                        </span>
+                                        <span className="hide-menu">Game Center</span>
+                                    </a>
+                                </li>
                                 <li className="nav-small-cap">
                                     <i className="ti ti-dots nav-small-cap-icon fs-4"></i>
                                     <span className="hide-menu">ACTIONS</span>
@@ -326,7 +335,7 @@ const Material = () => {
                                                         <td className="border-bottom-0"><h6 className="fw-normal">{data.language}</h6></td>
                                                         <td className="border-bottom-0"><h6 className="fw-normal">{data.title}</h6></td>
                                                         <td className="border-bottom-0"><a href={`../../public/uploads/pdf/${data.pdfUrl}`} target='_blank'>{data.pdfUrl}</a></td>
-                                                        <td className="border-bottom-0"><h6 className="fw-normal"><Link to={`/player/${data.id}`} target='blank'>{data.vedioUrl}</Link></h6></td>
+                                                        <td className="border-bottom-0"><a className="fw-normal"><Link to={`/player/${data.id}`} target='blank'>{data.vedioUrl}</Link></a></td>
                                                         <td className="border-bottom-0">
                                                             <div style={{ display: "flex", flexDirection: "row", marginLeft: '-0.9rem' }}>
                                                                 <Tooltip title="Update Language">

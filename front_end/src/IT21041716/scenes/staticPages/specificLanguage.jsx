@@ -28,6 +28,9 @@ const SpecificLanguage = () => {
   const oneData = useSelector((state) => state.language.oneData)
   const navigate = useNavigate();
 
+
+
+
   const id = localStorage.getItem("id");
   const language = oneData.name;
 
@@ -78,7 +81,6 @@ const SpecificLanguage = () => {
 
   }, [loading]);
 
-  console.log(language)
   const content = staticContent.filter(data => data.name === language)[0]
 
   return (

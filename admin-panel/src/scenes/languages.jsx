@@ -414,7 +414,7 @@ const Languages = () => {
     const logout = () => {
         dispatch(signout());
     };
-    
+
     return (
         <>
             <div className="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
@@ -464,6 +464,14 @@ const Languages = () => {
                                             <i className="ti ti-alert-circle"></i>
                                         </span>
                                         <span className="hide-menu">Add New Language</span>
+                                    </a>
+                                </li>
+                                <li className="sidebar-item">
+                                    <a className="sidebar-link" href="/game/view" aria-expanded="false">
+                                        <span>
+                                            <i className="ti ti-cards"></i>
+                                        </span>
+                                        <span className="hide-menu">Game Center</span>
                                     </a>
                                 </li>
                                 <li className="nav-small-cap">

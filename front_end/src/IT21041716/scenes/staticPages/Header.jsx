@@ -1,7 +1,11 @@
 import React from 'react'
 import logo from '../../../../public/logo2.png'
-
+import { Link } from 'react-router-dom'
 const header = () => {
+
+    const id = localStorage.getItem("userId")
+
+
     return (
         <div>
             <nav className="fh5co-nav" role="navigation">
@@ -16,7 +20,7 @@ const header = () => {
                                     <li><a href="/">Home</a></li>
                                     <li><a href="/learning">Start Learning</a></li>
                                     <li><a href="/admin">Compiler</a></li>
-                                    <li><a href="/admin">Community</a></li>
+                                    <li><Link to = {`/userProfile/${id}`}><a >Community</a></Link></li>
                                     <li><a href="/admin">About</a></li>
                                     <li className="btn-cta"><a href="#"><span>Login</span></a></li>
                                 </ul>
