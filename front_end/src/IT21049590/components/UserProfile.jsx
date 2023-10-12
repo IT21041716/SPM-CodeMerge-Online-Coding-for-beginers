@@ -17,6 +17,7 @@ import QuestionAnswerIcon from "@mui/icons-material/QuestionAnswer";
 import PlaylistPlayIcon from "@mui/icons-material/PlaylistPlay";
 import { CardMedia } from "@mui/material";
 import "./UserProfile.css";
+import Header from "../../IT21041716/scenes/staticPages/Header";
 
 const UserProfile = () => {
   const { userId } = useParams();
@@ -61,7 +62,10 @@ const UserProfile = () => {
   };
 
   return (
+    <div style={{ backgroundColor: 'lightblue' }}>
+      <Header/>
     <div className="user-profile-container">
+      
       <div class="profile">
         <center>
           <Avatar sx={{ width: 100, height: 100, marginBottom: 2 }}>
@@ -112,6 +116,7 @@ const UserProfile = () => {
           </Button>
         </DialogActions>
       </Dialog>
+    </div>
     </div>
   );
 };

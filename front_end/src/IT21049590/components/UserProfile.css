@@ -7,6 +7,10 @@
 } */
 
 .user-profile-container {
+  background-color: rgb(25, 37, 41);
+  background: rgba(0, 128, 0, 0.3);
+  /* background-image: url(""); */
+  
   display: flex;
   align-items: center;
   justify-content: center;
@@ -15,7 +19,7 @@
   margin-right: auto;
   width: 1000px;
   padding: 20px;
-  background-color: #ffffff;
+  background-color: #0d1313;
   border-radius: 8px;
   box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.15);
   text-align: center;
@@ -38,6 +42,7 @@
   height: 500px; /* Adjust the height as needed */
   width: 500px; /* Adjust the width as needed */
   border: 3px solid rgb(7, 67, 231);
+  background-color: #5d8383;
   padding: 20px; /* Adjust the padding as needed */
   margin: auto;
 }

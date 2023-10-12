@@ -15,6 +15,7 @@ import ForumIcon from "@mui/icons-material/Forum";
 import axios from "axios";
 import Avatar from "@mui/material/Avatar";
 import { CardMedia } from "@mui/material";
+import Header from "../../IT21041716/scenes/staticPages/Header";
 
 const QuestionCard = ({ question }) => {
   const [open, setOpen] = useState(false);
@@ -46,7 +47,9 @@ const QuestionCard = ({ question }) => {
   };
 
   return (
-    <>
+    
+    <div >
+      {/* <Header/> */}
       <Card>
         <CardContent>
           <Typography variant="h5" component="div">
@@ -58,7 +61,7 @@ const QuestionCard = ({ question }) => {
           <center>
             {question.image && (
               <CardMedia
-                sx={{ width: 800, height: 500, marginBottom: 2 }}
+                sx={{ width: 200, height: 200, marginBottom: 2 }}
                 component="img"
                 image={`../../../public/hirunaUploadsQuestion Images/${question.image}`}
                 alt={question.user.firstName}
@@ -121,7 +124,8 @@ const QuestionCard = ({ question }) => {
           </DialogActions>
         </div>
       </Dialog>
-    </>
+    </div>
+    
   );
 };
 
