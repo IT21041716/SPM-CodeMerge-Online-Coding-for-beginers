@@ -236,12 +236,12 @@ const home = () => {
                         <div className="row">
                             <div className="col-md-6 animate-box">
                                 <div className="course">
-                                    <a href="#" className="course-img" style={{ backgroundImage: "url(images/materials.png)" }}>
+                                    <a href="/learning" className="course-img" style={{ backgroundImage: "url(images/materials.png)" }}>
                                     </a>
                                     <div className="desc">
                                         <h3><a href="#">Learning Repository</a></h3>
                                         <p>Delve into our expansive learning repository, teeming with educational resources and comprehensive courses designed to propel your coding skills to new heights.</p>
-                                        <span><a href="#" className="btn btn-primary btn-sm btn-course">Try it</a></span>
+                                        <span><a href="/learning" className="btn btn-primary btn-sm btn-course">Try it</a></span>
                                     </div>
                                 </div>
                             </div>

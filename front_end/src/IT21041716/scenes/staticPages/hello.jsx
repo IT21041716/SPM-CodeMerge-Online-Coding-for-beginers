@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import './staticPages/common.css'
+import './common.css'
 import { toast } from 'react-hot-toast'
 import { Link, useParams } from 'react-router-dom'
 import pdf from '../../assets/IT21041716/pdf.jpeg'
@@ -10,6 +10,8 @@ import { Box } from "@mui/material";
 import { getAllMaterial } from '../actions/materialAction'
 import { getById } from '../actions/languageActions'
 import bg from '../../assets/IT21041716/bg.jpg'
+import axios from 'axios';
+import {useNavigate} from 'react-router-dom'
 
 const singleLanguage = () => {
 
@@ -20,10 +22,36 @@ const singleLanguage = () => {
     const oneData = useSelector((state) => state.language.oneData)
     const id = useparams.id;
     const language = oneData.name;
+    const navigate = useNavigate();
+
+    //sajindu
+    const [game,setGame] =useState([]);
+
+    const navigateGame = (e) => {
+        console.log(e)
+        axios.get(`http://localhost:8080/v1/game/gameTopic/${e}`).then((res)=>{
+            console.log(res)
+            navigate(`/games/list/${res.data}`);
+        }).catch((err)=>{
+            toast.error('Error in game loading')
+        })
+    }
+
+    console.log(game);
 
     useEffect(() => {
         dispatch(getById(id));
     }, [dispatch, id]);
+
+    //sajindu
+    useEffect(()=>{
+        axios.get('http://localhost:8080/v1/game/gameModuls').then((res) => {
+            setGame(res.data);
+            console.log(res.data)
+        }).catch((err) => {
+            console.log(err);
+        })
+      },[])
 
 
     useEffect(() => {
@@ -94,7 +122,43 @@ const singleLanguage = () => {
                                             </p>
                                         </Link>
                                     </div>
+                                    
                                 </div>
+                                <div className='one-line'>
+                                    <div>
+                                        <img src={vedio} className='coloum-icon' />
+                                    </div>
+                                    <div className='same-line'>
+                                        <Link to={`/player/${data.id}`} target='blank'>
+                                            <p className='coloum-para'>
+                                                <a className='video-title'>Hi</a>
+                                            </p>
+                                        </Link>
+                                    </div>
+                                    
+                                    
+                                </div>
+                                <div className='one-line'>
+                                    {game.map(ga=>(
+                                        ga == data.title ?
+                                        <div>
+                                    <div>
+                                        
+                                    </div>
+                                    <div className='same-line'>
+                                        {/* <Link to={`/games/list/${ga}`} >
+                                            Play Game
+                                        </Link> */}
+                                        <button onClick={()=>navigateGame(ga)}>Play Game</button>
+                                    </div>
+                                    </div>:null
+                                    ))}
+                                    
+                                    
+                                    
+                                </div>
+
+                                
 
                             </div>
                         </div>

@@ -13,7 +13,7 @@ const header = () => {
                             </div>
                             <div className="col-xs-10 text-right menu-1">
                                 <ul>
-                                    <li><a href="/home">Home</a></li>
+                                    <li><a href="/">Home</a></li>
                                     <li><a href="/learning">Start Learning</a></li>
                                     <li><a href="/admin">Compiler</a></li>
                                     <li><a href="/admin">Community</a></li>

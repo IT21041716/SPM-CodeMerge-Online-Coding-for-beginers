@@ -5,11 +5,12 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 
 //sithanga
-import UserMainPage from "./IT21041716/scenes/userMain";
 import Language from "./IT21041716/scenes/singleLanguage";
 import VedioPlayer from "./IT21041716/scenes/vedioPlayer";
 import Home from './IT21041716/scenes/staticPages/home'
 import Learning from './IT21041716/scenes/staticPages/learning'
+import LanguageSpec from './IT21041716/scenes/staticPages/specificLanguage'
+
 
 import Login from "./IT21049590/components/Login";
 import Signup from "./IT21049590/components/Signup";
@@ -32,15 +33,15 @@ function App() {
         <Routes>
 
           {/* sithanga  */}
-          <Route path="/language" element={<UserMainPage />} />
           <Route path="/language/:id" element={<Language />} />
-          <Route path="/player/:id" element={<VedioPlayer />} />
 
 
 
           
           <Route path="/" element={<Home />} />
           <Route path="/learning" element={<Learning />} />
+          <Route path="/content" element={<LanguageSpec />} />
+          <Route path="/player/:id" element={<VedioPlayer />} />
 
           {/* end sithanga */}
 

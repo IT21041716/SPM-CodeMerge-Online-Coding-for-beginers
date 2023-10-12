@@ -183,13 +183,19 @@ const addNewLan = () => {
                                             <img src={avatar} alt="" width="35" height="35" className="rounded-circle" />
                                         </a>
                                         <div className="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
+                                        <div className="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
                                             <div className="message-body">
                                                 <a href="javascript:void(0)" className="d-flex align-items-center gap-2 dropdown-item">
                                                     <i className="ti ti-user fs-6"></i>
-                                                    <p className="mb-0 fs-3">My Profile</p>
+                                                    <p className="mb-0 fs-3">{user.name}</p>
+                                                </a>
+                                                <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
+                                                    <i class="ti ti-mail fs-6"></i>
+                                                    <p class="mb-0 fs-3">{user.email}</p>
                                                 </a>
                                                 <button onClick={logout} className="btn btn-outline-primary mx-3 mt-2 d-block">Logout</button>
                                             </div>
+                                        </div>
                                         </div>
                                     </li>
                                 </ul>

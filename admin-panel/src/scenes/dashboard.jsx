@@ -9,6 +9,7 @@ const dashboard = () => {
     const [time, setTime] = useState(new Date());
     const dispatch = useDispatch();
     const authenticated = useSelector((state) => state.auth.authenticated)
+    const user = useSelector((state) => state.auth.user)
     useEffect(() => {
         const intervalId = setInterval(() => {
             setTime(new Date());
@@ -85,7 +86,7 @@ const dashboard = () => {
                                     <span className="hide-menu">ACTIONS</span>
                                 </li>
                                 <li className="sidebar-item">
-                                    <button onClick={logout} className="sidebar-link" href="./authentication-login.html" aria-expanded="false">
+                                    <button onClick={logout} className="sidebar-link" aria-expanded="false">
                                         <span>
                                             <i className="ti ti-login"></i>
                                         </span>
@@ -118,7 +119,11 @@ const dashboard = () => {
                                             <div className="message-body">
                                                 <a href="javascript:void(0)" className="d-flex align-items-center gap-2 dropdown-item">
                                                     <i className="ti ti-user fs-6"></i>
-                                                    <p className="mb-0 fs-3">My Profile</p>
+                                                    <p className="mb-0 fs-3">{user.name}</p>
+                                                </a>
+                                                <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
+                                                    <i class="ti ti-mail fs-6"></i>
+                                                    <p class="mb-0 fs-3">{user.email}</p>
                                                 </a>
                                                 <button onClick={logout} className="btn btn-outline-primary mx-3 mt-2 d-block">Logout</button>
                                             </div>
@@ -148,12 +153,6 @@ const dashboard = () => {
                                 <div className="row">
                                     <div className="col-lg-12">
                                         <div class="card overflow-hidden">
-                                            {/* <h5 class="card-title mb-9 fw-semibold">Yearly Breakup</h5>
-                                        <div className="clock">
-                                            <div className="time">Time{formattedTime}</div>
-                                            <div className="date">Date{formattedDate}</div>
-                                        </div> */}
-
                                             <div class="card-body p-4">
                                                 <h5 class="card-title mb-9 fw-semibold">Clock</h5>
                                                 <div class="row align-items-center">
