@@ -1,6 +1,5 @@
 package com.example.CodeFest.services;
 
-
 import java.util.List;
 import java.util.Optional;
 
@@ -8,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.CodeFest.model.Question;
-import com.example.CodeFest.repo.QuestionRepository;
 
+import com.example.CodeFest.repo.QuestionRepository;
 
 @Service
 public class QuestionService {
@@ -23,6 +22,10 @@ public class QuestionService {
 
     public List<Question> getAllQuestions() {
         return questionRepository.findAll();
+    }
+
+    public Question save(Question question) {
+        return questionRepository.save(question);
     }
 
     public Question getQuestionById(String questionId) {
@@ -46,8 +49,9 @@ public class QuestionService {
     public void deleteQuestion(String questionId) {
         questionRepository.deleteById(questionId);
     }
+
     public List<Question> getQuestionsByUserId(String userId) {
         return questionRepository.findByUser_Id(userId);
     }
-    
+
 }

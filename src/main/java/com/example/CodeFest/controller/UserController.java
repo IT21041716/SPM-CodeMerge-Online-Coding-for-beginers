@@ -138,6 +138,17 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         }
     }
+    @GetMapping("id/{id}")
+public ResponseEntity<User> getOne1(@PathVariable String id) {
+    User user = service.getOne(id).orElse(null);
+
+    if (user != null) {
+        return ResponseEntity.status(HttpStatus.OK).body(user);
+    } else {
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+    }
+}
+
 
     @PostMapping("/login")
     public ResponseEntity<Map> login(@RequestBody User body) {

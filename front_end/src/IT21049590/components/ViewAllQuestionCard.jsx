@@ -129,6 +129,14 @@ const QuestionCard = ({ question, userId }) => {
               alt={question.user.firstName}
             />
           </Avatar>
+          <Avatar sx={{ width: 100, height: 100, marginBottom: 2 }}>
+            <CardMedia
+              component="img"
+              height="100"
+              image={`../../../public/hirunaUploadsQuestion Images/${question.image}`}
+              alt={question.user.firstName}
+            />
+          </Avatar>
           <Typography variant="h6" gutterBottom>
              {question.user.firstName} {question.user.lastName}
           </Typography>

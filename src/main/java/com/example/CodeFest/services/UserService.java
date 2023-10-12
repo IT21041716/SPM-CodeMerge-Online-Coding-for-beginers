@@ -56,6 +56,9 @@ public class UserService {
     public Optional<User> getOne(String id) {
         return repository.findById(id);
     }
+     public User getOne1(String id) {
+        return repository.findById(id);
+    }
 
     public String login(User user) {
         User existingUser = repository.findByEmail(user.getEmail());

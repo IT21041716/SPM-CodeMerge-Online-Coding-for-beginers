@@ -11,6 +11,8 @@ import CancelIcon from '@mui/icons-material/Cancel';
 const AddQuestionDialog = ({ open, onClose, onSubmit }) => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
+  const [image, setImage] = useState("");
+
 
   const handleClose = () => {
     // Reset form values and close the dialog
@@ -19,17 +21,17 @@ const AddQuestionDialog = ({ open, onClose, onSubmit }) => {
     onClose();
   };
 
-  const handleSubmit = () => {
-    // Validate form data if needed
-
-    // Call the onSubmit function and pass the data
+  const handleSubmit = (e) => {
+    
     onSubmit(title, content);
 
     // Reset form values and close the dialog
     setTitle('');
     setContent('');
+    setImage();
     onClose();
   };
+  
 
   return (
     <Dialog open={open} onClose={handleClose}>
@@ -58,6 +60,7 @@ const AddQuestionDialog = ({ open, onClose, onSubmit }) => {
           onChange={(e) => setContent(e.target.value)}
         />
       </DialogContent>
+      
       <DialogActions>
         <Button
           onClick={handleClose}
