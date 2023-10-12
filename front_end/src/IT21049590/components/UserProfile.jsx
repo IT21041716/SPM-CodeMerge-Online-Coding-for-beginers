@@ -62,10 +62,9 @@ const UserProfile = () => {
   };
 
   return (
-    <div>
-      <Header/>
-    <div className="user-profile-container">
-      
+    <div style={{ backgroundColor: "lightblue" }}>
+      <Header />
+
       <div class="profile">
         <center>
           <Avatar sx={{ width: 100, height: 100, marginBottom: 2 }}>
@@ -116,7 +115,6 @@ const UserProfile = () => {
           </Button>
         </DialogActions>
       </Dialog>
-    </div>
     </div>
   );
 };
