@@ -121,37 +121,60 @@ const QuestionCard = ({ question, userId }) => {
     <>
       <Card sx={{ marginBottom: 2 }}>
         <CardContent>
-          <Avatar sx={{ width: 100, height: 100, marginBottom: 2 }}>
-            <CardMedia
-              component="img"
-              height="100"
-              image={`../../../public/hirunaUploadsUserImages/${question.user.image}`}
-              alt={question.user.firstName}
-            />
-          </Avatar>
-          <Typography variant="h6" gutterBottom>
-             {question.user.firstName} {question.user.lastName}
-          </Typography>
+          <Grid container alignItems="center" spacing={2}>
+            <Grid item>
+              <Avatar sx={{ width: 50, height: 50, marginBottom: 2 }}>
+                <CardMedia
+                  component="img"
+                  height="50"
+                  image={`../../../public/hirunaUploadsUserImages/${question.user.image}`}
+                  alt={question.user.firstName}
+                />
+              </Avatar>
+            </Grid>
+            <Grid item>
+              <Typography variant="h6" gutterBottom>
+                {question.user.firstName} {question.user.lastName}
+              </Typography>
+            </Grid>
+          </Grid>
+          <center>
+            {question.image && (
+              <CardMedia
+                sx={{ width: 800, height: 500, marginBottom: 2 }}
+                component="img"
+                image={`../../../public/hirunaUploadsQuestion Images/${question.image}`}
+                alt={question.user.firstName}
+              />
+            )}
+          </center>
+
           <Typography variant="h5" component="div" gutterBottom>
             {question.title}
           </Typography>
+
           <Typography color="text.secondary" paragraph>
             {question.content}
           </Typography>
-          <Button
-            variant="outlined"
-            onClick={() => handleClickOpen(question.id)}
-            startIcon={<AnswerIcon />}
-          >
-            View Answers
-          </Button>
-          <Button
-            variant="outlined"
-            onClick={() => handleAddAnswerClickOpen(question)}
-            startIcon={<AddIcon />}
-          >
-            Add Answer
-          </Button>
+          <div sx={{  }}>
+            <Button
+              variant="outlined"
+              onClick={() => handleClickOpen(question.id)}
+              startIcon={<AnswerIcon />}
+              sx={{ marginLeft: 50 }}
+            >
+              View Answers
+            </Button>
+
+            <Button
+              variant="outlined"
+              onClick={() => handleAddAnswerClickOpen(question)}
+              startIcon={<AddIcon />}
+              sx={{ marginLeft: 5 }}
+            >
+              Add Answer
+            </Button>
+          </div>
         </CardContent>
       </Card>
 
@@ -171,7 +194,8 @@ const QuestionCard = ({ question, userId }) => {
                   />
                 </Avatar>
                 <Typography variant="subtitle1">
-                  <strong>User:</strong> {ans.user.firstName} {ans.user.lastName}
+                  <strong>User:</strong> {ans.user.firstName}{" "}
+                  {ans.user.lastName}
                 </Typography>
                 {ans.user.id !== params.userId && (
                   <Typography variant="body1">

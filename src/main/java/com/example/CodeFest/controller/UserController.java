@@ -7,10 +7,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.example.CodeFest.model.Languages;
 import com.example.CodeFest.model.User;
 import com.example.CodeFest.services.UserService;
-import com.example.CodeFest.util.PdfContentUtil;
 import com.example.CodeFest.util.UserContentUtil;
 
 import java.util.ArrayList;
@@ -134,6 +132,17 @@ public class UserController {
 
         if (data.isPresent()) {
             return ResponseEntity.status(HttpStatus.OK).body(data);
+        } else {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+        }
+    }
+
+    @GetMapping("id/{id}")
+    public ResponseEntity<User> getOne1(@PathVariable String id) {
+        User user = service.getOne(id).orElse(null);
+
+        if (user != null) {
+            return ResponseEntity.status(HttpStatus.OK).body(user);
         } else {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         }

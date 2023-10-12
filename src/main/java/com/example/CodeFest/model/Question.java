@@ -10,6 +10,7 @@ public class Question {
     private String id;
     private String title;
     private String content;
+    private String image;
     @DBRef
     private User user;
 
@@ -43,6 +44,14 @@ public class Question {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public String getImage() {
+        return this.image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
 }

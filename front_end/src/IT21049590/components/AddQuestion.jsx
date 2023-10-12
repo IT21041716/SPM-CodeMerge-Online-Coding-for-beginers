@@ -6,11 +6,13 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import SendIcon from "@mui/icons-material/Send";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 
 const AddQuestion = ({ userId, onClose }) => {
+  const [user, setUser] = useState("");
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [user, setUser] = useState("");
+  const [image, setImage] = useState("");
 
   useEffect(() => {
     axios
@@ -25,13 +27,15 @@ const AddQuestion = ({ userId, onClose }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const form = new FormData();
+    form.append("title", title);
+    form.append("content", content);
+    form.append("image", image);
+    form.append("userId", user.id);
+    console.log("User", user.id);
 
     axios
-      .post(`http://localhost:8080/questions/ask`, {
-        title,
-        content,
-        user,
-      })
+      .post(`http://localhost:8080/questions/insert`, form)
       .then(() => {
         alert("Question added");
         onClose(); // Close the dialog
@@ -40,7 +44,9 @@ const AddQuestion = ({ userId, onClose }) => {
         alert(err);
       });
   };
-
+  const handleCatImg = (e) => {
+    setImage(e.target.files[0]);
+  };
   return (
     <Box
       component="form"
@@ -74,6 +80,26 @@ const AddQuestion = ({ userId, onClose }) => {
         required
         sx={{ width: "100%", marginBottom: "20px" }}
       />
+      <div>
+        <input
+          accept="image/*"
+          id="image"
+          type="file"
+          style={{ display: "none" }}
+          onChange={(e) => {
+            handleCatImg(e);
+          }}
+        />
+        <label htmlFor="image">
+          <Button
+            variant="contained"
+            component="span"
+            startIcon={<CloudUploadIcon />}
+          >
+            Upload Image
+          </Button>
+        </label>
+      </div>
 
       <br></br>
       <div style={{ display: "flex", justifyContent: "center" }}>

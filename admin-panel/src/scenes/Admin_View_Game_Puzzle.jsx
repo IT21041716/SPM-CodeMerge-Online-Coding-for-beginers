@@ -9,6 +9,8 @@ import axios from "axios";
 import { Styles } from "./Add_Game_Puzzle";
 import { Modal } from "react-bootstrap";
 import toast from "react-hot-toast";
+import logo from '../assets/IT21041716/logo2.png'
+import { Link } from "react-router-dom";
 
 export default function AdminViewGamePuzzle() {
   const [showModal, setShowModal] = useState(false);
@@ -95,6 +97,7 @@ export default function AdminViewGamePuzzle() {
   console.log(gameID);
 
   const deleteGame = (e) => {
+    console.log('Hi')
     var result = window.confirm("Are you sure, you want to delete this game ?");
     if(result == true){
       axios.delete(`http://localhost:8080/v1/game/delete/${e}`).then(()=>{
@@ -104,8 +107,88 @@ export default function AdminViewGamePuzzle() {
       })
     }
   }
-
+  const logout = () => {
+    dispatch(signout());
+};
   return (
+    <div>
+
+<aside className="left-sidebar">
+                    {/* <!-- Sidebar scroll--> */}
+                    <div>
+                        <div className="brand-logo d-flex align-items-center justify-content-between">
+                            <a href="/" className="text-nowrap logo-img">
+                                <img src={logo} width="180" alt="" style={{ marginTop: '2rem' }} />
+                            </a>
+                            <div className="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
+                                <i className="ti ti-x fs-8"></i>
+                            </div>
+                        </div>
+                        {/* <!-- Sidebar navigation--> */}
+                        <nav className="sidebar-nav scroll-sidebar" data-simplebar="">
+                            <ul id="sidebarnav">
+                                <li className="nav-small-cap">
+                                    <i className="ti ti-dots nav-small-cap-icon fs-4"></i>
+                                    <span className="hide-menu" >Home</span>
+                                </li>
+                                <li className="sidebar-item">
+                                    <a className="sidebar-link" href="/" aria-expanded="false">
+                                        <span>
+                                            <i className="ti ti-layout-dashboard"></i>
+                                        </span>
+                                        <span className="hide-menu">Dashboard</span>
+                                    </a>
+                                </li>
+                                <li className="nav-small-cap">
+                                    <i className="ti ti-dots nav-small-cap-icon fs-4"></i>
+                                    <span className="hide-menu">COMPONENTS</span>
+                                </li>
+                                <li className="sidebar-item">
+                                    <a className="sidebar-link" href="/languages" aria-expanded="false">
+                                        <span>
+                                            <i className="ti ti-article"></i>
+                                        </span>
+                                        <span className="hide-menu">Languages</span>
+                                    </a>
+                                </li>
+                                <li className="sidebar-item">
+                                    <a className="sidebar-link" href="/newLanguage" aria-expanded="false">
+                                        <span>
+                                            <i className="ti ti-alert-circle"></i>
+                                        </span>
+                                        <span className="hide-menu">Add New Language</span>
+                                    </a>
+                                </li>
+                                <li className="sidebar-item">
+                                    <a className="sidebar-link" href="/game/view" aria-expanded="false">
+                                        <span>
+                                            <i className="ti ti-cards"></i>
+                                        </span>
+                                        <span className="hide-menu">Games Center</span>
+                                    </a>
+                                </li>
+                                <li className="nav-small-cap">
+                                    <i className="ti ti-dots nav-small-cap-icon fs-4"></i>
+                                    <span className="hide-menu">ACTIONS</span>
+                                </li>
+                                <li className="sidebar-item">
+                                    <button onClick={logout} className="sidebar-link" href="./authentication-login.html" aria-expanded="false">
+                                        <span>
+                                            <i className="ti ti-login"></i>
+                                        </span>
+                                        <span className="hide-menu">Logout</span>
+                                    </button>
+                                </li>
+                            </ul>
+                            <div >
+
+                            </div>
+                        </nav>
+                        {/* <!-- End Sidebar navigation --> */}
+                    </div>
+                    {/* <!-- End Sidebar scroll--> */}
+                </aside>
+    <div style={{marginLeft:'300px'}}>
     <div style={Styles.bodyStyle}>
       <br></br>
     <div style={Styles.secondDiv}>
@@ -113,6 +196,12 @@ export default function AdminViewGamePuzzle() {
       <h2 style={Styles.mainText}>Games Management</h2>
       <hr style={Styles.hrStyle}/>
       <br/>
+      <div>
+        <Link to={'/game/add'}>
+        <button className="btn btn-dark" style={{marginLeft:'800px'}}>Add</button>
+        </Link>
+      </div>
+      <br></br>
       <MDBTable align="middle" style={Style.tableStyle}>
         <MDBTableHead>
           <tr>
@@ -141,9 +230,8 @@ export default function AdminViewGamePuzzle() {
               <MDBBtn color="info" rounded size="sm" onClick={()=> handleShowModal(game.gameId)}>
                 Edit
               </MDBBtn>
-              <MDBBtn color="danger" rounded size="sm" onClick={()=> deleteGame(game.gameId)}>
-                Delete
-              </MDBBtn>
+              
+              <button className="btn btn-danger" onClick={()=> deleteGame(game.gameId)}>Delete</button>
             </td>
                </tr>
             ))}
@@ -223,6 +311,8 @@ export default function AdminViewGamePuzzle() {
         </Modal.Footer>
       </Modal>
 
+    </div>
+    </div>
     </div>
   );
 }

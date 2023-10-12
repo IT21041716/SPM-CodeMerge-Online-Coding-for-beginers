@@ -11,6 +11,8 @@ import Player from "./scenes/player";
 import AddnewLan from './scenes/addNewLan'
 import Login from './scenes/login'
 import Register from './scenes/register'
+import AddGamePluzzle from "./scenes/Add_Game_Puzzle";
+import AdminViewGamePuzzle from "./scenes/Admin_View_Game_Puzzle";
 
 function App() {
   const dispatch = useDispatch();
@@ -34,6 +36,8 @@ function App() {
           <Route path="/newLanguage" element={<AddnewLan />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/game/add" element={<AddGamePluzzle />} />
+          <Route path="/game/view" element={<AdminViewGamePuzzle />} />
         </Routes>
       </BrowserRouter>
     </>

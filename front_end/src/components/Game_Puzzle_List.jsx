@@ -9,12 +9,15 @@ import {
 import { useEffect, useState } from "react";
 import { SortableItems } from "./Game_Puzzle";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import QuizIcon from "@mui/icons-material/Quiz";
 import AcUnitIcon from "@mui/icons-material/AcUnit";
 import AdjustIcon from "@mui/icons-material/Adjust";
 import { MDBBtn } from "mdb-react-ui-kit";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import DoneOutlineIcon from '@mui/icons-material/DoneOutline';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { useNavigate } from 'react-router-dom';
 
 export default function Game_Puzzle_List() {
   const [gameQuestion, setGameQuestion] = useState("");
@@ -27,6 +30,7 @@ export default function Game_Puzzle_List() {
   const [answer, setAnswer] = useState(false);
   const [borderColor, setBorderColor] = useState("black");
   const [gameResult, setGameResult] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
@@ -35,6 +39,7 @@ export default function Game_Puzzle_List() {
         //console.log(res.data)
         const shuffledArray = shuffleArray(res.data);
         setGameText(shuffledArray);
+        console.log(gameTexts)
       })
       .then(() => {})
       .catch((err) => {
@@ -142,11 +147,24 @@ export default function Game_Puzzle_List() {
 
   function shuffleArray(array) {
     const newArray = [...array];
-    for (let i = newArray.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
+    for (let i = newArray.length-1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i +1));
       [newArray[i], newArray[j]] = [newArray[j], newArray[i]]; // Swap elements
     }
     return newArray;
+  }
+
+  const finishGame = (e) => {
+    var result = window.confirm("Congralutions!!!, you eran 10 pinots.");
+    if(result == true){
+      navigate(`/#`);
+    }
+  }
+  const BackGame = (e) => {
+    var result = window.confirm("You not complete this game, after compete this game you can eran 10 points, try again !");
+    if(result == true){
+      navigate(`/#`);
+    }
   }
 
   return (
@@ -226,6 +244,20 @@ export default function Game_Puzzle_List() {
                 <PlayArrowIcon /> run
               </MDBBtn>
             </div>
+            {gameResult == "Correct!" ? 
+            <div className="col">
+            <MDBBtn color="primary" style={{float:'right', marginRight:'100px'}} onClick={finishGame}>
+              <DoneOutlineIcon /> Finished
+            </MDBBtn>
+          </div>:<div className="col">
+            <Link to={'/#'}>
+            <MDBBtn color="danger" style={{float:'right', marginRight:'100px'}} onClick={BackGame}>
+              <ArrowBackIcon /> Back
+            </MDBBtn>
+            </Link>
+          </div>
+          }
+            
           </div>
           <br />
         </div>
