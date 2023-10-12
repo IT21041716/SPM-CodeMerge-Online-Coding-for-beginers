@@ -17,11 +17,15 @@ const Login = () => {
         email,
         password,
       });
+
       const data = response.data;
+
       if (data.status) {
         // Login successful, you can navigate to the user's dashboard or perform other actions here.
-        console.log("Login successful");
+        console.log("Login successful")
+        localStorage.setItem("email", email)
         navigate(`/userProfile/${response.data.id}`);
+
       } else {
         setErrorMessage(data.message);
       }

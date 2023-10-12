@@ -250,7 +250,7 @@ export default function Game_Puzzle_List() {
               <DoneOutlineIcon /> Finished
             </MDBBtn>
           </div>:<div className="col">
-            <Link to={'/#'}>
+            <Link to={'/'}>
             <MDBBtn color="danger" style={{float:'right', marginRight:'100px'}} onClick={BackGame}>
               <ArrowBackIcon /> Back
             </MDBBtn>

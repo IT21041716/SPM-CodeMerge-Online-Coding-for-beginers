@@ -5,7 +5,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 
 //sithanga
-import Language from "./IT21041716/scenes/singleLanguage";
 import VedioPlayer from "./IT21041716/scenes/vedioPlayer";
 import Home from './IT21041716/scenes/staticPages/home'
 import Learning from './IT21041716/scenes/staticPages/learning'
@@ -30,14 +29,7 @@ function App() {
     <>
       <Toaster position="top-center" reverseOrder={true} />
       <BrowserRouter>
-        <Routes>
-
-          {/* sithanga  */}
-          <Route path="/language/:id" element={<Language />} />
-
-
-
-          
+        <Routes>  
           <Route path="/" element={<Home />} />
           <Route path="/learning" element={<Learning />} />
           <Route path="/content" element={<LanguageSpec />} />
