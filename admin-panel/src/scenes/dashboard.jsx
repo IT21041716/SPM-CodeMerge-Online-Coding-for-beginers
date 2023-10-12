@@ -4,6 +4,8 @@ import avatar from '../assets/IT21041716/avatr.png'
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate } from 'react-router-dom'
 import { signout } from '../actions/authAction';
+import axios from 'axios'
+
 
 const dashboard = () => {
     const [time, setTime] = useState(new Date());
@@ -27,15 +29,37 @@ const dashboard = () => {
         dispatch(signout());
     };
 
-    
 
+    const [pdfData, setPdfData] = useState([]);
+    const [videoData, setVideoData] = useState([]);
 
+    const fetchPdfData = () => {
+        axios.get('http://localhost:8080/api/pdfView/getAll')
+            .then((res) => {
+                setPdfData(res.data);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
 
+    const fetchVideoData = () => {
+        axios.get('http://localhost:8080/api/videoView/getAll')
+            .then((res) => {
+                setVideoData(res.data);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
 
+    useEffect(() => {
+        fetchPdfData();
+        fetchVideoData();
+    }, []);
 
-
-
-
+    const lastThreevideo = videoData.slice(-3);
+    const lastThreeMaterials = pdfData.slice(-3);
 
     if (!authenticated) {
         return <Navigate to='/login' />
@@ -161,7 +185,42 @@ const dashboard = () => {
                                     <div className="card-body">
                                         <div className="d-sm-flex d-block align-items-center justify-content-between mb-9">
                                             <div className="mb-3 mb-sm-0">
-                                                <h5 className="card-title fw-semibold">Sales Overview</h5>
+                                                <h5 className="card-title fw-semibold">Recent Watched Pdf</h5>
+                                                <div className="table-responsive" style={{ marginLeft: '5rem', marginRight: 'auto' }}>
+                                                    <table className="table text-nowrap mb-0 align-middle" >
+                                                        <thead className="text-dark fs-4">
+                                                            <tr>
+                                                                <th className="border-bottom-0">
+                                                                    <h6 className="fw-semibold mb-0">No</h6>
+                                                                </th>
+                                                                <th className="border-bottom-0">
+                                                                    <h6 className="fw-semibold mb-0">User</h6>
+                                                                </th>
+                                                                <th className="border-bottom-0">
+                                                                    <h6 className="fw-semibold mb-0">Title</h6>
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {
+                                                                lastThreeMaterials.map((data, index) => (
+                                                                    <tr key={index}>
+                                                                        <td className="border-bottom-0">
+                                                                            <p className="mb-0 fw-normal">{index + 1}</p>
+                                                                        </td>
+                                                                        <td className="border-bottom-0">
+                                                                            <p className="mb-0 fw-normal">{data.user}</p>
+                                                                        </td>
+                                                                        <td className="border-bottom-0">
+                                                                            <p className="mb-0 fw-normal">{data.pdfTitle}</p>
+                                                                        </td>
+                                                                    </tr>
+                                                                ))
+                                                            }
+
+                                                        </tbody>
+                                                    </table>
+                                                </div>
                                             </div>
 
                                         </div>
@@ -189,7 +248,7 @@ const dashboard = () => {
                                         </div>
                                     </div>
                                 </div>
-         
+
                             </div>
                         </div>
                     </div>
@@ -198,10 +257,12 @@ const dashboard = () => {
                             <div className="card w-100">
                                 <div className="card-body p-4">
                                     <div className="mb-4">
-                                        <h5 className="card-title fw-semibold">Recent Transactions</h5>
+                                        <h5 className="card-title fw-semibold">User Details</h5>
                                     </div>
                                     <ul className="timeline-widget mb-0 position-relative mb-n5">
-
+                                        <li>Full Name -:  {user.name}</li><br/>
+                                        <li>Email -:  {user.email}</li><br/>
+                                        <li>Contact Number -: {user.contactNo}</li><br/>
                                     </ul>
                                 </div>
                             </div>
@@ -209,101 +270,39 @@ const dashboard = () => {
                         <div className="col-lg-8 d-flex align-items-stretch">
                             <div className="card w-100">
                                 <div className="card-body p-4">
-                                    <h5 className="card-title fw-semibold mb-4">Recent Transactions</h5>
-                                    <div className="table-responsive">
-                                        <table className="table text-nowrap mb-0 align-middle">
+                                    <h5 className="card-title fw-semibold mb-4">Recent Watched Videos</h5>
+                                    <div className="table-responsive" style={{ marginLeft: '5rem', marginRight: 'auto' }}>
+                                        <table className="table text-nowrap mb-0 align-middle" >
                                             <thead className="text-dark fs-4">
                                                 <tr>
                                                     <th className="border-bottom-0">
-                                                        <h6 className="fw-semibold mb-0">Id</h6>
+                                                        <h6 className="fw-semibold mb-0">No</h6>
                                                     </th>
                                                     <th className="border-bottom-0">
-                                                        <h6 className="fw-semibold mb-0">Assigned</h6>
+                                                        <h6 className="fw-semibold mb-0">User</h6>
                                                     </th>
                                                     <th className="border-bottom-0">
-                                                        <h6 className="fw-semibold mb-0">Name</h6>
-                                                    </th>
-                                                    <th className="border-bottom-0">
-                                                        <h6 className="fw-semibold mb-0">Priority</h6>
-                                                    </th>
-                                                    <th className="border-bottom-0">
-                                                        <h6 className="fw-semibold mb-0">Budget</h6>
+                                                        <h6 className="fw-semibold mb-0">Title</h6>
                                                     </th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
-                                                    <td className="border-bottom-0"><h6 className="fw-semibold mb-0">1</h6></td>
-                                                    <td className="border-bottom-0">
-                                                        <h6 className="fw-semibold mb-1">Sunil Joshi</h6>
-                                                        <span className="fw-normal">Web Designer</span>
-                                                    </td>
-                                                    <td className="border-bottom-0">
-                                                        <p className="mb-0 fw-normal">Elite Admin</p>
-                                                    </td>
-                                                    <td className="border-bottom-0">
-                                                        <div className="d-flex align-items-center gap-2">
-                                                            <span className="badge bg-primary rounded-3 fw-semibold">Low</span>
-                                                        </div>
-                                                    </td>
-                                                    <td className="border-bottom-0">
-                                                        <h6 className="fw-semibold mb-0 fs-4">$3.9</h6>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td className="border-bottom-0"><h6 className="fw-semibold mb-0">2</h6></td>
-                                                    <td className="border-bottom-0">
-                                                        <h6 className="fw-semibold mb-1">Andrew McDownland</h6>
-                                                        <span className="fw-normal">Project Manager</span>
-                                                    </td>
-                                                    <td className="border-bottom-0">
-                                                        <p className="mb-0 fw-normal">Real Homes WP Theme</p>
-                                                    </td>
-                                                    <td className="border-bottom-0">
-                                                        <div className="d-flex align-items-center gap-2">
-                                                            <span className="badge bg-secondary rounded-3 fw-semibold">Medium</span>
-                                                        </div>
-                                                    </td>
-                                                    <td className="border-bottom-0">
-                                                        <h6 className="fw-semibold mb-0 fs-4">$24.5k</h6>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td className="border-bottom-0"><h6 className="fw-semibold mb-0">3</h6></td>
-                                                    <td className="border-bottom-0">
-                                                        <h6 className="fw-semibold mb-1">Christopher Jamil</h6>
-                                                        <span className="fw-normal">Project Manager</span>
-                                                    </td>
-                                                    <td className="border-bottom-0">
-                                                        <p className="mb-0 fw-normal">MedicalPro WP Theme</p>
-                                                    </td>
-                                                    <td className="border-bottom-0">
-                                                        <div className="d-flex align-items-center gap-2">
-                                                            <span className="badge bg-danger rounded-3 fw-semibold">High</span>
-                                                        </div>
-                                                    </td>
-                                                    <td className="border-bottom-0">
-                                                        <h6 className="fw-semibold mb-0 fs-4">$12.8k</h6>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td className="border-bottom-0"><h6 className="fw-semibold mb-0">4</h6></td>
-                                                    <td className="border-bottom-0">
-                                                        <h6 className="fw-semibold mb-1">Nirav Joshi</h6>
-                                                        <span className="fw-normal">Frontend Engineer</span>
-                                                    </td>
-                                                    <td className="border-bottom-0">
-                                                        <p className="mb-0 fw-normal">Hosting Press HTML</p>
-                                                    </td>
-                                                    <td className="border-bottom-0">
-                                                        <div className="d-flex align-items-center gap-2">
-                                                            <span className="badge bg-success rounded-3 fw-semibold">Critical</span>
-                                                        </div>
-                                                    </td>
-                                                    <td className="border-bottom-0">
-                                                        <h6 className="fw-semibold mb-0 fs-4">$2.4k</h6>
-                                                    </td>
-                                                </tr>
+                                                {
+                                                    lastThreevideo.map((data, index) => (
+                                                        <tr key={index}>
+                                                            <td className="border-bottom-0">
+                                                                <p className="mb-0 fw-normal">{index + 1}</p>
+                                                            </td>
+                                                            <td className="border-bottom-0">
+                                                                <p className="mb-0 fw-normal">{data.user}</p>
+                                                            </td>
+                                                            <td className="border-bottom-0">
+                                                                <p className="mb-0 fw-normal">{data.videoTitle}</p>
+                                                            </td>
+                                                        </tr>
+                                                    ))
+                                                }
+
                                             </tbody>
                                         </table>
                                     </div>

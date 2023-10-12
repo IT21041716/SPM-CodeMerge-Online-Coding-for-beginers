@@ -21,68 +21,76 @@ import staticContent from './data'
 
 
 const SpecificLanguage = () => {
-
   const dispatch = useDispatch();
-  const allMaterial = useSelector((state) => state.material.allMaterial)
-  const loading = useSelector((state) => state.material.loading)
-  const oneData = useSelector((state) => state.language.oneData)
+  const allMaterial = useSelector((state) => state.material.allMaterial);
+  const loading = useSelector((state) => state.material.loading);
+  const oneData = useSelector((state) => state.language.oneData);
   const navigate = useNavigate();
 
-
-
-
-  const id = localStorage.getItem("id");
+  const id = localStorage.getItem('id');
   const language = oneData.name;
 
-  //sajindu
   const [game, setGame] = useState([]);
 
   const navigateGame = (e) => {
-    console.log(e)
     axios.get(`http://localhost:8080/v1/game/gameTopic/${e}`).then((res) => {
-      console.log(res)
       navigate(`/games/list/${res.data}`);
     }).catch((err) => {
-      toast.error('Error in game loading')
-    })
-  }
-
-  console.log(game);
+      toast.error('Error in game loading');
+    });
+  };
 
   useEffect(() => {
     dispatch(getById(id));
-  }, [dispatch, id]);
+    dispatch(getAllMaterial(language));
+  }, [dispatch, id, language]);
 
-
-  //sajindu
   useEffect(() => {
     axios.get('http://localhost:8080/v1/game/gameModuls').then((res) => {
       setGame(res.data);
-      console.log(res.data)
     }).catch((err) => {
       console.log(err);
-    })
-  }, [])
-
-  useEffect(() => {
-    dispatch(getAllMaterial(language));
-  }, [dispatch, language]);
-
+    });
+  }, []);
 
   useEffect(() => {
     if (loading === true) {
-      toast.loading('Loading...', {
-        id: 'loading'
-      })
+      toast.loading('Loading...', { id: 'loading' });
+    } else if (loading === false) {
+      toast.dismiss('loading');
     }
-    else if (loading === false) {
-      toast.dismiss('loading')
-    }
-
   }, [loading]);
 
-  const content = staticContent.filter(data => data.name === language)[0]
+  const content = staticContent.find((data) => data.name === language);
 
+
+  const handleClick = async (data) => {
+
+    const form = {
+      user: localStorage.getItem("email"),
+      pdfTitle: data.title
+
+    }
+    try {
+      const res = await axios.post('http://localhost:8080/api/pdfView/insert', form);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  }
+
+  const handleClick2 = async (data) => {
+
+    const form = {
+      user: localStorage.getItem("email"),
+      videoTitle: data.title
+
+    }
+    try {
+      const res = await axios.post('http://localhost:8080/api/videoView/insert', form);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  }
   return (
     <>
       <Header />
@@ -147,7 +155,7 @@ const SpecificLanguage = () => {
                   </div>
                   <div className='same-line'>
                     <p className='coloum-para'>
-                      <a className='pdf-title' href={`../../../../public/uploads/pdf/${data.pdfUrl}`} target='_blank' rel="noopener noreferrer">{data.title}.pdf</a>
+                      <a className='pdf-title' href={`../../../../public/uploads/pdf/${data.pdfUrl}`} onClick={() => handleClick(data)} target='_blank' rel="noopener noreferrer">{data.title}.pdf</a>
                     </p>
                   </div>
                 </div>
@@ -158,7 +166,7 @@ const SpecificLanguage = () => {
                   <div className='same-line'>
                     <Link to={`/player/${data.id}`} target='blank'>
                       <p className='coloum-para'>
-                        <p className='video-title'>{data.title} video.mp4</p>
+                        <p className='video-title' onClick={() => handleClick2(data)}>{data.title} video.mp4</p>
                       </p>
                     </Link>
                   </div>
