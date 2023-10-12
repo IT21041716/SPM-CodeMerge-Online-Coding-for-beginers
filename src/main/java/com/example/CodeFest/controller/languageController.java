@@ -52,7 +52,7 @@ public class languageController {
 
             if (isValidFileType(file)) {
                 try {
-                    PdfContentUtil.saveFile(uploadDir, fileName, file);
+                    PdfContentUtil.saveFile(uploadDir, uploadDir, fileName, file);
                     languageObj.setImageUrl(fileName);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -75,7 +75,7 @@ public class languageController {
 
                 if (isValidFileType(file)) {
                     try {
-                        PdfContentUtil.saveFile(uploadDir, fileName, file);
+                        PdfContentUtil.saveFile(uploadDir, uploadDir, fileName, file);
                         languageObj.setCoverImageUrl(fileName);
 
                     } catch (Exception e) {
@@ -122,27 +122,28 @@ public class languageController {
 
     @PutMapping("/updateLanguage")
     public Languages updateLanguage(
-            @RequestParam("id") String id, 
+            @RequestParam("id") String id,
             @RequestParam("name") String name,
             @RequestParam("description") String description,
             @RequestParam(value = "files", required = false) MultipartFile[] files,
             @RequestParam("pageTitle") String pageTitle,
             @RequestParam("pageSubTitle") String pageSubTitle,
             @RequestParam(value = "coverImage", required = false) MultipartFile[] coverImage) {
-    
+
         Languages languageObj = new Languages();
         String uploadDir = "LanguageImages";
-    
+        String uploadDir2 = "LanguageImages";
+
         // Check if there are new language images in the request
         if (files != null) {
             MultipartFile file = files[0]; // Assuming only one file is expected
             long timestamp = System.currentTimeMillis();
             String fileName = timestamp + "_"
                     + StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
-    
+
             if (isValidFileType(file)) {
                 try {
-                    PdfContentUtil.saveFile(uploadDir, fileName, file);
+                    PdfContentUtil.saveFile(uploadDir, uploadDir2, fileName, file);
                     languageObj.setImageUrl(fileName);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -154,16 +155,16 @@ public class languageController {
             Languages data = languageService.getOne(id);
             languageObj.setImageUrl(data.getImageUrl());
         }
-    
+
         if (coverImage != null) {
             MultipartFile coverFile = coverImage[0];
             long timestamp = System.currentTimeMillis();
             String coverFileName = timestamp + "_"
                     + StringUtils.cleanPath(Objects.requireNonNull(coverFile.getOriginalFilename()));
-    
+
             if (isValidFileType(coverFile)) {
                 try {
-                    PdfContentUtil.saveFile(uploadDir, coverFileName, coverFile);
+                    PdfContentUtil.saveFile(uploadDir, uploadDir, coverFileName, coverFile);
                     languageObj.setCoverImageUrl(coverFileName);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -175,15 +176,14 @@ public class languageController {
             Languages data = languageService.getOne(id);
             languageObj.setCoverImageUrl(data.getCoverImageUrl());
         }
-    
+
         languageObj.setId(id);
         languageObj.setName(name);
         languageObj.setDescription(description);
         languageObj.setPageTitle(pageTitle);
         languageObj.setPageSubTitle(pageSubTitle);
-    
+
         return languageService.updateLanguage(languageObj);
     }
-    
 
 }

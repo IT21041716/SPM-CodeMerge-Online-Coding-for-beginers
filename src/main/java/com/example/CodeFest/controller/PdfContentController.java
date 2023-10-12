@@ -48,7 +48,7 @@ public class PdfContentController {
 
             if (isValidFileType(file)) {
                 try {
-                    PdfContentUtil.saveFile(uploadDir, fileName, file);
+                    PdfContentUtil.saveFile(uploadDir, uploadDir, fileName, file);
                     pdf.setPdfUrl(fileName);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -75,7 +75,7 @@ public class PdfContentController {
 
             if (isValidFileTypeVedio(file)) {
                 try {
-                    PdfContentUtil.saveFile(uploadDirV, fileName, file);
+                    PdfContentUtil.saveFile(uploadDirV, uploadDirV, fileName, file);
                     pdf.setVedioUrl(fileName);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -144,7 +144,7 @@ public class PdfContentController {
                 // Move file type validation check inside the block
                 if (isValidFileType(file)) {
                     try {
-                        PdfContentUtil.saveFile(uploadDir, fileName, file);
+                        PdfContentUtil.saveFile(uploadDir, uploadDir, fileName, file);
                         pdf.setPdfUrl(fileName);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -171,7 +171,7 @@ public class PdfContentController {
                 // Move file type validation check inside the block
                 if (isValidFileTypeVedio(file)) {
                     try {
-                        PdfContentUtil.saveFile(uploadDirV, fileName, file);
+                        PdfContentUtil.saveFile(uploadDirV, uploadDirV, fileName, file);
                         pdf.setVedioUrl(fileName);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -200,10 +200,10 @@ public class PdfContentController {
     }
 
     @DeleteMapping("/delete/{id}/{language}")
-    public List<PdfContent> pdfDelete(@PathVariable("id") String id, @PathVariable("language") List<String> language){
+    public List<PdfContent> pdfDelete(@PathVariable("id") String id, @PathVariable("language") List<String> language) {
         System.out.println(language);
         System.out.println(id);
-        pdfContentService.deletePdfContent(id); 
+        pdfContentService.deletePdfContent(id);
         List<PdfContent> pdfList = pdfContentService.getByLanguage(language);
         return pdfList;
     }

@@ -18,7 +18,6 @@ export default function AddGamePluzzle() {
   };
 
   const addGame = (e) => {
-    console.log("Hello wellcome how are you");
     if (gameModuleName === "") {
       console.log("game module name missing");
     } else if (gameModuleTopic === "") {

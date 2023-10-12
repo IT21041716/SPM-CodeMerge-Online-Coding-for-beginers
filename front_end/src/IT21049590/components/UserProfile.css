@@ -1,10 +1,10 @@
-body {
+/* body {
   display: flex;
   align-items: center;
   justify-content: center;
   height: 100vh;
-  margin: 0; /* Remove default body margin */
-}
+  margin: 0; 
+} */
 
 .user-profile-container {
   width: 400px;

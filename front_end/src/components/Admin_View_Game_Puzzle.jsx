@@ -8,6 +8,7 @@ import {
 import axios from "axios";
 import { Styles } from "./Add_Game_Puzzle";
 import { Modal } from "react-bootstrap";
+import toast from "react-hot-toast";
 
 export default function AdminViewGamePuzzle() {
   const [showModal, setShowModal] = useState(false);
@@ -16,7 +17,7 @@ export default function AdminViewGamePuzzle() {
   const [texts,setTexts] = useState([]);
   const [codeNo, setCodeNo] = useState(0);
   const [gameText, setGameTexts] = useState([]);
-  const [gameID,setGameID]=("");
+  const [gameID,setGameID]= useState("");
   const [gameModuleName, setGameModuleName] = useState("");
   const [gameModuleTopic, setGameModuleTopic] = useState("");
   
@@ -32,7 +33,7 @@ export default function AdminViewGamePuzzle() {
   };
 
   const handleShowModal = (e) => {
-    setShowModal(true);
+    console.log(e)
     axios.get(`http://localhost:8080/v1/game/view/${e}`).then((res)=>{
       setOneGame(res.data);
       setQuestion(res.data.question);
@@ -40,10 +41,13 @@ export default function AdminViewGamePuzzle() {
       setGameID(res.data.gameId);
       setGameModuleName(res.data.gameModuleName);
       setGameModuleTopic(res.data.gameModuleTopic);
+      console.log(res.data)
+    }).then(()=>{
+
+      setShowModal(true);
     }).catch((err)=>{
       console.log(err);
     })
-  
   };
   const handleCloseModal = () => setShowModal(false);
 
@@ -51,18 +55,29 @@ export default function AdminViewGamePuzzle() {
  
 
   const updateGame = (e) => {
-    const form = new FormData();
-
+    console.log(e)
+    if(gameModuleName == ""){
+      toast.error('Please enter the game module name')
+    }else if(gameModuleTopic == ""){
+      toast.error('Please enter the game module topic')
+    }else if(gameText == ""){
+      toast.error('Please enter the game answers')
+    }else if(qeustion == ""){
+      toast.error('Please enter the question')
+    }else if(gameModuleName != "" && gameText != "" && qeustion != "" && gameModuleTopic != ""){
+      const form = new FormData();
+    console.log(e)
     form.append("gameModule", gameModuleName);
     form.append("GMTopic", gameModuleTopic);
     form.append("text", gameText);
     form.append("question", qeustion);
     console.log(form)
     axios.put(`http://localhost:8080/v1/game/update/${e}`,form).then(()=>{
-      console.log("success");
+      toast.success('Game Updated!')
     }).catch((err)=>{
       console.log(err);
     })
+    }
   }
 
   useEffect(()=>{
@@ -77,6 +92,18 @@ export default function AdminViewGamePuzzle() {
   console.log(gameModuleTopic);
   console.log(gameText);
   console.log(qeustion);
+  console.log(gameID);
+
+  const deleteGame = (e) => {
+    var result = window.confirm("Are you sure, you want to delete this game ?");
+    if(result == true){
+      axios.delete(`http://localhost:8080/v1/game/delete/${e}`).then(()=>{
+        toast.success('Game Deleted!');
+      }).catch((err)=>{
+        toast.error('Error in game deleting!')
+      })
+    }
+  }
 
   return (
     <div style={Styles.bodyStyle}>
@@ -114,7 +141,7 @@ export default function AdminViewGamePuzzle() {
               <MDBBtn color="info" rounded size="sm" onClick={()=> handleShowModal(game.gameId)}>
                 Edit
               </MDBBtn>
-              <MDBBtn color="danger" rounded size="sm">
+              <MDBBtn color="danger" rounded size="sm" onClick={()=> deleteGame(game.gameId)}>
                 Delete
               </MDBBtn>
             </td>
@@ -178,7 +205,7 @@ export default function AdminViewGamePuzzle() {
           </div> <br/><br/>
           <div className="row">
             <div className="col">
-              <button className="btn btn-dark">Update</button>
+              <button className="btn btn-dark" type="submit">Update</button>
             </div>
           </div>
           </form>
