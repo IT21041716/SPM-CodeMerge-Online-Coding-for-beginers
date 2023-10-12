@@ -30,6 +30,7 @@ const Languages = () => {
     const authenticated = useSelector((state) => state.auth.authenticated);
     const loading = useSelector(state => state.language.loading)
     const loading2 = useSelector((state) => state.material.loading)
+    const user = useSelector((state) => state.auth.user)
 
     useEffect(() => {
         if (loading === true) {

@@ -123,11 +123,6 @@ public class PdfContentController {
             @RequestParam(value = "vedio", required = false) MultipartFile[] vedioFiles) {
         List<String> errorMessages = new ArrayList<>();
         PdfContent pdf = new PdfContent();
-        System.out.println(id);
-        System.out.println(language);
-        System.out.println(title);
-        System.out.println(pdfFiles);
-        System.out.println(vedioFiles);
 
         if (pdfFiles == null && vedioFiles == null) {
             System.out.println("No files were uploaded");

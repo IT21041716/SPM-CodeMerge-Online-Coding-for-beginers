@@ -17,9 +17,7 @@ const header = () => {
                                     <li><a href="/learning">Start Learning</a></li>
                                     <li><a href="/admin">Compiler</a></li>
                                     <li><a href="/admin">Community</a></li>
-                                    <li><a href="/admin">Games</a></li>
                                     <li><a href="/admin">About</a></li>
-                                    <li><a href="/">Contact</a></li>
                                     <li className="btn-cta"><a href="#"><span>Login</span></a></li>
                                 </ul>
                             </div>

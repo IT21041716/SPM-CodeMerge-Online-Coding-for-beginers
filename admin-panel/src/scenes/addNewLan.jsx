@@ -34,7 +34,8 @@ const addNewLan = () => {
     const [pageSubTitle, setPageSubTitle] = useState("");
     const [files, setFiles] = useState(null);
     const [coverImage, setCoverImage] = useState(null);
-
+    const user = useSelector((state) => state.auth.user)
+    
     const handleCatImg = (e) => {
         const file = e.target.files[0];
         setFiles(file);
