@@ -81,11 +81,6 @@ const SpecificLanguage = () => {
   console.log(language)
   const content = staticContent.filter(data => data.name === language)[0]
 
-
-
-
-
-
   return (
     <>
       <Header />
@@ -165,6 +160,22 @@ const SpecificLanguage = () => {
                       </p>
                     </Link>
                   </div>
+                </div>
+                <div className='one-line'>
+                  {game.map(ga => (
+                    ga == data.title ?
+                      <div>
+                        <div>
+
+                        </div>
+                        <div className='same-line'>
+                          {/* <Link to={`/games/list/${ga}`} >
+                                            Play Game
+                                        </Link> */}
+                          <button onClick={() => navigateGame(ga)}>Play Game</button>
+                        </div>
+                      </div> : null
+                  ))}
                 </div>
               </div>
             </div>
