@@ -8,18 +8,18 @@
 
 .user-profile-container {
   background-color: rgb(25, 37, 41);
-  background: rgba(0, 128, 0, 0.3);
+  background: rgba(162, 163, 155, 0);
   /* background-image: url(""); */
   
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100vh;
+  height: 750px;
   margin-left: auto; 
   margin-right: auto;
   width: 1000px;
   padding: 20px;
-  background-color: #0d1313;
+  background-color: #8a7b7b93;
   border-radius: 8px;
   box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.15);
   text-align: center;
@@ -41,8 +41,8 @@
 .profile {
   height: 500px; /* Adjust the height as needed */
   width: 500px; /* Adjust the width as needed */
-  border: 3px solid rgb(7, 67, 231);
-  background-color: #5d8383;
+  /* border: 3px solid rgb(7, 67, 231); */
+  background-color: #dee7e7;
   padding: 20px; /* Adjust the padding as needed */
   margin: auto;
 }
