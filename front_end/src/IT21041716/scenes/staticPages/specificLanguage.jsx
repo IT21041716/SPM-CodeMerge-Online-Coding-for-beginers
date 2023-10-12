@@ -172,7 +172,7 @@ const SpecificLanguage = () => {
                           {/* <Link to={`/games/list/${ga}`} >
                                             Play Game
                                         </Link> */}
-                          <button onClick={() => navigateGame(ga)}>Play Game</button>
+                          <button onClick={() => navigateGame(ga)} className="btn btn-primary btn-sm btn-course">Play Game</button>
                         </div>
                       </div> : null
                   ))}
